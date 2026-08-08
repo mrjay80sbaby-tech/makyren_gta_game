@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ma'Kyren - Open World Web Game</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        background-color: #000;
+        font-family: sans-serif;
+      }
+      #hud {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        color: #ffffff;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="hud">
+      <h1>Ma'Kyren</h1>
+      <p>Controls: WASD to Move</p>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

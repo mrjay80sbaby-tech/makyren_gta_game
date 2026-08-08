@@ -1,0 +1,10 @@
+makyren-gta-game/
+├── render.yaml
+├── client/
+│   ├── index.html
+│   ├── package.json
+│   └── src/
+│       └── main.js
+└── server/
+    ├── index.js
+    └── package.json
