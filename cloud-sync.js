@@ -1,0 +1,6 @@
+import {loadCloud,saveCloud,setLocal} from './supabase.js';
+const badge=document.createElement('div');badge.id='cloud-status';badge.textContent='CLOUD: CONNECTING';badge.style.cssText='position:fixed;left:20px;bottom:20px;padding:7px 10px;border-radius:8px;background:#080b10cc;border:1px solid #ffffff1a;color:#9bb1c8;font:700 10px system-ui;letter-spacing:.08em;z-index:10';document.body.appendChild(badge);
+function applySave(s){if(!s)return;const local={version:2,cash:Number(s.cash)||500,wanted:Number(s.wanted)||0};setLocal(local);const cash=document.getElementById('cash');if(cash)cash.textContent=`$${local.cash}`}
+async function boot(){const remote=await loadCloud();if(remote){applySave(remote);badge.textContent='CLOUD: SAVED';badge.style.color='#74d99a'}else{badge.textContent='CLOUD: NEW';badge.style.color='#75bfff'}}
+async function sync(){const state=window.__makyrenState?.();if(!state)return;const ok=await saveCloud(state);badge.textContent=ok?'CLOUD: SAVED':'CLOUD: OFFLINE';badge.style.color=ok?'#74d99a':'#ffcf55'}
+boot();setInterval(sync,15000);
