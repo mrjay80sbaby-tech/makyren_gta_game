@@ -1,0 +1,4 @@
+// MAKYREN-015 — connect HUD actions to live gameplay systems.
+export function connectMakyrenHUD({weapons,interiors,getTarget,save}={}){window.addEventListener('makyren-action',e=>{const a=e.detail;if(a==='fire')weapons?.fire?.(getTarget?.());if(a==='melee')weapons?.melee?.(getTarget?.());if(a==='reload')weapons?.reload?.();if(a==='inventory')window.dispatchEvent(new CustomEvent('makyren-inventory-open'));save?.()});window.addEventListener('makyren-interact',e=>{if(e.detail?.interior)interiors?.enter?.(e.detail.interior);save?.()});return true}
+export function bindMissionState(state,save){return {setMission(m){state.mission=m;save?.(state)},complete(reward=0){state.cash=(state.cash||0)+reward;state.mission='complete';save?.(state)}}}
+window.MakyrenRuntimeBridge={connectMakyrenHUD,bindMissionState};
