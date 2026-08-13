@@ -1,0 +1,1 @@
+{"name":"makyren-visual-004","private":true,"type":"module","scripts":{"build":"vite build"},"dependencies":{"@babylonjs/core":"^8.32.0","@babylonjs/loaders":"^8.32.0"},"devDependencies":{"vite":"^7.1.0"}}
