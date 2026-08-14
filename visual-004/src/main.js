@@ -21,6 +21,12 @@ const laneMat=new PBRMaterial('lane_markings',scene); laneMat.albedoColor=new Co
 for(let z=-34;z<=34;z+=8){const dash=MeshBuilder.CreateBox('lane_dash',{width:.12,height:.012,depth:3.2},scene);dash.position.set(0,.012,z);dash.material=laneMat;}
 const curbMat=new PBRMaterial('curb_edge',scene); curbMat.albedoColor=new Color3(.12,.14,.15); curbMat.roughness=.82;
 for(const x of [-9.3,9.3]){const curb=MeshBuilder.CreateBox('curb',{width:.28,height:.16,depth:80},scene);curb.position.set(x,.08,0);curb.material=curbMat;}
+const crosswalkMat=new PBRMaterial('crosswalk_paint',scene); crosswalkMat.albedoColor=new Color3(.72,.74,.7); crosswalkMat.roughness=.8;
+for(let i=-4;i<=4;i++){const stripe=MeshBuilder.CreateBox('crosswalk_stripe',{width:1.1,height:.018,depth:.32},scene);stripe.position.set(i*1.65,.026,-1.5);stripe.material=crosswalkMat;}
+const planterMat=new PBRMaterial('planter_concrete',scene); planterMat.albedoColor=new Color3(.16,.18,.18); planterMat.roughness=.92;
+const trunkMat=new PBRMaterial('tree_trunk',scene); trunkMat.albedoColor=new Color3(.09,.045,.025); trunkMat.roughness=.95;
+const leafMat=new PBRMaterial('tree_leaves',scene); leafMat.albedoColor=new Color3(.035,.16,.09); leafMat.roughness=.85;
+if(quality!=='mobile')for(const z of [-24,0,24]){for(const x of [-10.8,10.8]){const planter=MeshBuilder.CreateBox('planter',{width:1.15,height:.55,depth:1.15},scene);planter.position.set(x,.28,z);planter.material=planterMat;const trunk=MeshBuilder.CreateCylinder('tree_trunk',{height:2.5,diameter:.16},scene);trunk.position.set(x,.55,z);trunk.material=trunkMat;for(const offset of [[0,1.9,0],[-.35,1.65,0],[.35,1.65,0]]){const crown=MeshBuilder.CreateSphere('tree_crown',{diameter:1.35,segments:12},scene);crown.position.set(x+offset[0],offset[1],z+offset[2]);crown.material=leafMat;}}}
 const buildingMat=new PBRMaterial('building',scene); buildingMat.albedoColor=new Color3(.12,.15,.18); buildingMat.metallic=.12; buildingMat.roughness=.62;
 for(let i=-30;i<=30;i+=12){for(const x of [-16,16]){const h=8+(Math.abs(i)%20);const b=MeshBuilder.CreateBox('building',{width:8,height:h,depth:9},scene);b.position.set(x,h/2,i);b.material=buildingMat;}}
 const windowMat=new PBRMaterial('warm_windows',scene); windowMat.albedoColor=new Color3(.12,.08,.035); windowMat.emissiveColor=new Color3(.55,.22,.045); windowMat.roughness=.3;
@@ -28,6 +34,10 @@ const coolWindowMat=new PBRMaterial('cool_windows',scene); coolWindowMat.albedoC
 if(qualityConfig.windows)for(let z=-30;z<=30;z+=12){for(const x of [-11.93,11.93]){const h=8+(Math.abs(z)%20);for(let y=3;y<h-.8;y+=3.1){const panel=MeshBuilder.CreateBox('window_panel',{width:.06,height:1.35,depth:1.65},scene);panel.position.set(x,y,z+(z%24===0?1.8:-1.8));panel.material=(z/12)%2===0?windowMat:coolWindowMat;}}}
 const storefrontMat=new PBRMaterial('storefront_neon',scene); storefrontMat.albedoColor=new Color3(.06,.02,.09); storefrontMat.emissiveColor=new Color3(.3,.02,.42); storefrontMat.roughness=.35;
 for(const z of [-18,6,30]){const sign=MeshBuilder.CreateBox('storefront_sign',{width:5.2,height:.5,depth:.08},scene);sign.position.set(-11.7,3.2,z);sign.material=storefrontMat;}
+const benchMat=new PBRMaterial('bench_metal',scene); benchMat.albedoColor=new Color3(.08,.09,.1); benchMat.metallic=.55; benchMat.roughness=.42;
+if(quality!=='mobile')for(const z of [-12,12]){const seat=MeshBuilder.CreateBox('bench_seat',{width:1.6,height:.12,depth:.42},scene);seat.position.set(10.65,.72,z);seat.material=benchMat;for(const x of [10.1,11.2]){const leg=MeshBuilder.CreateBox('bench_leg',{width:.08,height:.65,depth:.08},scene);leg.position.set(x,.38,z);leg.material=benchMat;}}
+const utilityMat=new PBRMaterial('utility_pole',scene); utilityMat.albedoColor=new Color3(.06,.07,.075); utilityMat.metallic=.45; utilityMat.roughness=.5;
+for(const z of [-30,30]){const pole=MeshBuilder.CreateCylinder('utility_pole',{height:7,diameter:.14},scene);pole.position.set(8.7,3.5,z);pole.material=utilityMat;const arm=MeshBuilder.CreateBox('utility_arm',{width:2.2,height:.08,depth:.08},scene);arm.position.set(8.7,6.3,z);arm.material=utilityMat;}
 const carMat=new PBRMaterial('vehicle',scene);carMat.albedoColor=new Color3(.035,.16,.28);carMat.metallic=.82;carMat.roughness=.24;
 const car=MeshBuilder.CreateBox('vehicle',{width:2.25,height:.7,depth:4.5},scene);car.position.set(0,.7,-6);car.material=carMat;
 const glass=new PBRMaterial('glass',scene);glass.albedoColor=new Color3(.02,.035,.045);glass.metallic=.2;glass.roughness=.08;
