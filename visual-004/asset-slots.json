@@ -1,0 +1,14 @@
+{
+  "license_policy": "Use CC0 or otherwise commercially permitted assets only; verify each asset license before shipping.",
+  "slots": {
+    "character": {"path": "assets/makyren.glb", "fallback": "procedural_capsule", "lods": ["high", "medium", "mobile"]},
+    "vehicle": {"path": "assets/city_vehicle.glb", "fallback": "procedural_vehicle", "lods": ["high", "medium", "mobile"]},
+    "buildings": {"path": "assets/city-kit.glb", "fallback": "procedural_buildings", "lods": ["high", "medium", "mobile"]},
+    "props": {"path": "assets/street-props.glb", "fallback": "procedural_props", "lods": ["high", "medium", "mobile"]}
+  },
+  "quality": {
+    "high": {"hardware_scale": 0.85, "glow": 0.7, "windows": true},
+    "medium": {"hardware_scale": 1.2, "glow": 0.45, "windows": true},
+    "mobile": {"hardware_scale": 1.55, "glow": 0.25, "windows": false}
+  }
+}
