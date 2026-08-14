@@ -20,6 +20,10 @@ jobs:
           node-version: 20
           cache: npm
           cache-dependency-path: visual-004/package.json
+      - name: Validate browser JavaScript syntax
+        run: |
+          find . -maxdepth 1 -name '*.js' -print0 | xargs -0 -n1 node --check
+          node --check visual-004/src/main.js
       - name: Install and build visual-004
         working-directory: visual-004
         run: npm install && npm run build
