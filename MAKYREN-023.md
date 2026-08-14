@@ -14,4 +14,4 @@ Status: implemented foundation
 
 Target: substantially stronger visual presentation while preserving the $0 mobile-first constraint. This is an AAA-inspired web renderer, not literal Unreal Engine 5 rendering.
 
-Next: preview and evaluate the actual build before adding more systems.
+Next: MAKYREN-024 — dynamic lighting, street lamps, and vehicle headlights driven by the world clock.
