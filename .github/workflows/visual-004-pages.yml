@@ -30,6 +30,7 @@ jobs:
       - name: Assemble Pages site
         run: |
           mkdir -p _site/visual-004
+          cp -R visual-004/dist/. _site/
           cp -R visual-004/dist/. _site/visual-004/
           cp -R .nojekyll _site/.nojekyll 2>/dev/null || true
       - uses: actions/upload-pages-artifact@v4
