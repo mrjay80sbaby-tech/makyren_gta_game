@@ -4,7 +4,9 @@
     "character": {"path": "assets/makyren.glb", "fallback": "procedural_capsule", "lods": ["high", "medium", "mobile"]},
     "vehicle": {"path": "assets/city_vehicle.glb", "fallback": "procedural_vehicle", "lods": ["high", "medium", "mobile"]},
     "buildings": {"path": "assets/city-kit.glb", "fallback": "procedural_buildings", "lods": ["high", "medium", "mobile"]},
-    "props": {"path": "assets/street-props.glb", "fallback": "procedural_props", "lods": ["high", "medium", "mobile"]}
+    "props": {"path": "assets/street-props.glb", "fallback": "procedural_props", "lods": ["high", "medium", "mobile"]},
+    "streetLamp": {"path": "assets/street_lamp_01.glb", "fallback": "procedural_lamp", "source": "https://polyhaven.com/a/street_lamp_01", "license": "CC0", "delivery_note": "Use an optimized lower-resolution GLB; the listed 4K source is 31.41 MB."},
+    "tree": {"path": "assets/tree_small_02.glb", "fallback": "procedural_tree", "source": "https://polyhaven.com/a/tree_small_02", "license": "CC0", "delivery_note": "Use a decimated, texture-resized GLB; the listed 4K source is 263.02 MB."}
   },
   "quality": {
     "high": {"hardware_scale": 0.85, "glow": 0.7, "windows": true},

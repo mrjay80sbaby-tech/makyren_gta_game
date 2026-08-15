@@ -9,7 +9,7 @@ const quality=qualityParam||((innerWidth<720||navigator.hardwareConcurrency<4)?'
 const qualityConfig={mobile:{scale:1.55,glow:.25,windows:false},medium:{scale:1.2,glow:.45,windows:true},high:{scale:.85,glow:.7,windows:true}}[quality]||{scale:.85,glow:.7,windows:true};
 const engine=new Engine(canvas,true,{preserveDrawingBuffer:false,stencil:true},true); engine.setHardwareScalingLevel(qualityConfig.scale);
 window.MakyrenVisualQuality={preset:quality,config:qualityConfig};
-window.MakyrenAssetSlots={character:'assets/makyren.glb',vehicle:'assets/city_vehicle.glb',buildings:'assets/city-kit.glb',props:'assets/street-props.glb'};
+window.MakyrenAssetSlots={character:'assets/makyren.glb',vehicle:'assets/city_vehicle.glb',buildings:'assets/city-kit.glb',props:'assets/street-props.glb',streetLamp:'assets/street_lamp_01.glb',tree:'assets/tree_small_02.glb'};
 window.MakyrenLoadAsset=async slot=>{const path=window.MakyrenAssetSlots[slot];if(!path)throw new Error(`Unknown asset slot: ${slot}`);try{const container=await SceneLoader.LoadAssetContainerAsync('',path,scene);container.addAllToScene();return {slot,path,container,loaded:true};}catch(error){console.warn(`Optional asset ${slot} unavailable; procedural fallback remains active.`,error);return {slot,path,loaded:false,fallback:true};}};
 const scene=new Scene(engine); scene.clearColor=new Color4(.018,.028,.05,1); scene.fogMode=Scene.FOGMODE_EXP2; scene.fogDensity=quality==='mobile'?.014:.008; scene.fogColor=new Color3(.018,.028,.05); const glow=new GlowLayer('cinematic_glow',scene); glow.intensity=qualityConfig.glow;
 const camera=new ArcRotateCamera('camera',-Math.PI/2.5,1.18,30,new Vector3(0,1.8,0),scene);
