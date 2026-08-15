@@ -1,6 +1,7 @@
 import { Engine, Scene, ArcRotateCamera, Vector3, TransformNode, HemisphericLight, DirectionalLight, PointLight, Color4, MeshBuilder, StandardMaterial, Color3, PBRMaterial, Texture, GlowLayer } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 import { SceneLoader } from '@babylonjs/core/Loading/sceneLoader';
+import { DynamicTexture } from '@babylonjs/core/Materials/Textures/dynamicTexture';
 
 const canvas=document.getElementById('renderCanvas');
 const params=new URLSearchParams(location.search); const qualityParam=params.get('quality'); const debug=params.get('debug')==='1';
@@ -30,6 +31,7 @@ const trunkMat=new PBRMaterial('tree_trunk',scene); trunkMat.albedoColor=new Col
 const leafMat=new PBRMaterial('tree_leaves',scene); leafMat.albedoColor=new Color3(.035,.16,.09); leafMat.roughness=.85;
 if(quality!=='mobile')for(const z of [-24,0,24]){for(const x of [-10.8,10.8]){const planter=MeshBuilder.CreateBox('planter',{width:1.15,height:.55,depth:1.15},scene);planter.position.set(x,.28,z);planter.material=planterMat;const trunk=MeshBuilder.CreateCylinder('tree_trunk',{height:2.5,diameter:.16},scene);trunk.position.set(x,.55,z);trunk.material=trunkMat;for(const offset of [[0,1.9,0],[-.35,1.65,0],[.35,1.65,0]]){const crown=MeshBuilder.CreateSphere('tree_crown',{diameter:1.35,segments:12},scene);crown.position.set(x+offset[0],offset[1],z+offset[2]);crown.material=leafMat;}}}
 const buildingMat=new PBRMaterial('building',scene); buildingMat.albedoColor=new Color3(.12,.15,.18); buildingMat.metallic=.12; buildingMat.roughness=.62;
+if(quality!=='mobile'){const facadeTexture=new DynamicTexture('facade_texture',{width:256,height:256},scene,false);const facadeContext=facadeTexture.getContext();facadeContext.fillStyle='#18212a';facadeContext.fillRect(0,0,256,256);for(let y=12;y<256;y+=28){for(let x=10;x<256;x+=34){facadeContext.fillStyle=(x+y)%3===0?'#28435c':'#222e38';facadeContext.fillRect(x,y,18,12);}}for(let y=0;y<256;y+=64){facadeContext.fillStyle='#10161c';facadeContext.fillRect(0,y,256,3);}facadeTexture.update();buildingMat.albedoTexture=facadeTexture;buildingMat.albedoColor=Color3.White();}
 for(let i=-30;i<=30;i+=12){for(const x of [-16,16]){const h=8+(Math.abs(i)%20);const b=MeshBuilder.CreateBox('building',{width:8,height:h,depth:9},scene);b.position.set(x,h/2,i);b.material=buildingMat;}}
 const windowMat=new PBRMaterial('warm_windows',scene); windowMat.albedoColor=new Color3(.12,.08,.035); windowMat.emissiveColor=new Color3(.55,.22,.045); windowMat.roughness=.3;
 const coolWindowMat=new PBRMaterial('cool_windows',scene); coolWindowMat.albedoColor=new Color3(.025,.09,.14); coolWindowMat.emissiveColor=new Color3(.03,.16,.3); coolWindowMat.roughness=.28;
