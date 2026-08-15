@@ -14,8 +14,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 20
           cache: npm
@@ -32,7 +32,7 @@ jobs:
           mkdir -p _site/visual-004
           cp -R visual-004/dist/. _site/visual-004/
           cp -R .nojekyll _site/.nojekyll 2>/dev/null || true
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: _site
   deploy:
