@@ -15,3 +15,11 @@ Lighting is composed as a three-part setup: a directional daylight source, a war
 | Post-processing | FXAA, bloom, ACES, exposure/contrast, ColorCurves | Bloom disabled on mobile; lower samples and kernel on medium |
 
 The hero-car source is [Kenney’s Car Kit](https://kenney.nl/assets/car-kit), which is listed as Creative Commons CC0. The street-lamp and PBR surface sources remain documented in the existing asset integration records.
+
+## Animation and reflection extension
+
+The character now exposes `window.MakyrenCharacterAnimator` with `idle`, `walk`, and `sprint` states. Separate limb meshes are driven by a deterministic phase-based gait and breathing cycle, so an imported skeleton animation can replace the procedural layer without changing gameplay input. The current build retains the procedural fallback because no compatible CC0 animated character GLB was available in the existing asset set.
+
+The renderer now includes Babylon’s SSR pipeline as an opt-in high-tier path at `?ssr=1`, using downsampled reflections, a bounded 32-step ray budget, and a guard that disables SSR below 24 FPS. The default high-quality URL leaves SSR off for playability. A custom wet-road shader was prototyped and rejected after visual verification exposed a blank-frame regression; it was removed before release.
+
+The available free vehicle remains the CC0 Kenney sports sedan, now augmented with PBR trim, clear-coat metal, lenses, mirrors, and beltline detail. A genuinely photorealistic CC0 replacement could not be legally staged from the inspected public sources: the promising Sketchfab concept-car page identifies the model as public-domain but exposes no unauthenticated downloadable archive, while the accessible BMW repository uses CC BY 4.0 rather than the project’s stricter CC0-only policy.

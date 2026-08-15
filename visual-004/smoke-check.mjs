@@ -4,12 +4,15 @@ const required = [
   "vehicle:'assets/hero_vehicle.glb'",
   "window.MakyrenLoadAsset('vehicle'",
   'heroVehicleRoot',
+  'hero_vehicle_trim',
   'balcony_slab',
   'building_sign',
   'street_bin',
   'new DefaultRenderingPipeline',
-  'post.bloomEnabled',
+  'new SSRRenderingPipeline',
+  "ssrOptIn:'?ssr=1'",
   'new ColorCurves',
+  'MakyrenCharacterAnimator',
   'const heroKey=',
   'const cityRim='
 ];
