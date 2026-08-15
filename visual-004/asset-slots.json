@@ -8,6 +8,10 @@
     "streetLamp": {"path": "assets/street_lamp_01.glb", "fallback": "procedural_lamp", "source": "https://polyhaven.com/a/street_lamp_01", "license": "CC0", "delivery_note": "Use an optimized lower-resolution GLB; the listed 4K source is 31.41 MB."},
     "tree": {"path": "assets/tree_small_02.glb", "fallback": "procedural_tree", "source": "https://polyhaven.com/a/tree_small_02", "license": "CC0", "delivery_note": "Use a decimated, texture-resized GLB; the listed 4K source is 263.02 MB."}
   },
+  "materials": {
+    "asphalt": {"path": "assets/materials/asphalt", "source": "https://ambientcg.com/view?id=Asphalt025C", "license": "CC0", "maps": ["color", "normal", "roughness", "ao"], "tiers": ["high", "medium"]},
+    "facade": {"path": "assets/materials/facade", "source": "https://ambientcg.com/view?id=Facade001", "license": "CC0", "maps": ["color", "normal", "roughness"], "tiers": ["high", "medium"]}
+  },
   "quality": {
     "high": {"hardware_scale": 0.85, "glow": 0.7, "windows": true},
     "medium": {"hardware_scale": 1.2, "glow": 0.45, "windows": true},
