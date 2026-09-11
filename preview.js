@@ -41,3 +41,14 @@ document.getElementById('bag').onclick=()=>document.getElementById('inventory').
 document.getElementById('closeBag').onclick=()=>document.getElementById('inventory').classList.add('hidden');
 document.getElementById('closeShop').onclick=()=>document.getElementById('shop').classList.add('hidden');
 document.getElementById('buyMedkit').onclick=()=>{if(gameState.cash>=100){gameState.cash-=100;gameState.inventory.push('Medkit');refreshGameUI()}else document.getElementById('shopTitle').textContent='NOT ENOUGH CASH'};
+
+const gameState={cash:500,health:100,inventory:['Phone','Starter Pistol']};
+const market={x:24,z:24};
+const marketMarker=new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,5,16),new THREE.MeshBasicMaterial({color:0x59b5ff}));marketMarker.position.set(market.x,2.5,market.z);scene.add(marketMarker);
+const cashEl=document.getElementById('cash'),healthEl=document.getElementById('health'),promptEl=document.getElementById('prompt'),invEl=document.getElementById('inventoryItems');
+function refreshGameUI(){cashEl.textContent='$'+gameState.cash;healthEl.textContent=gameState.health+' HP';invEl.innerHTML=gameState.inventory.map(i=>'<div>• '+i+'</div>').join('')}refreshGameUI();
+let nearMarket=false;setInterval(()=>{nearMarket=Math.hypot(player.position.x-market.x,player.position.z-market.z)<7;promptEl.textContent=nearMarket?'E — ENTER CITY MARKET':'EXPLORE — Find the blue market marker'},100);
+function interactWorld(){if(nearMarket)document.getElementById('shop').classList.remove('hidden')}
+addEventListener('keydown',e=>{if(e.code==='KeyE')interactWorld();if(e.code==='KeyI')document.getElementById('inventory').classList.toggle('hidden')});
+document.getElementById('bag').onclick=()=>document.getElementById('inventory').classList.toggle('hidden');document.getElementById('closeBag').onclick=()=>document.getElementById('inventory').classList.add('hidden');document.getElementById('closeShop').onclick=()=>document.getElementById('shop').classList.add('hidden');
+document.getElementById('buyMedkit').onclick=()=>{if(gameState.cash>=100){gameState.cash-=100;gameState.inventory.push('Medkit');refreshGameUI()}else document.getElementById('shopTitle').textContent='NOT ENOUGH CASH'};
