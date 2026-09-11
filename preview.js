@@ -13,3 +13,15 @@ const clock=new THREE.Clock();let yaw=Math.PI,pitch=.2,drag=false,lx=0,ly=0;addE
 const keys={};addEventListener('keydown',e=>keys[e.code]=true);addEventListener('keyup',e=>keys[e.code]=false);
 function loop(){requestAnimationFrame(loop);const dt=Math.min(clock.getDelta(),.05);const f=(keys.KeyW?1:0)-(keys.KeyS?1:0),r=(keys.KeyD?1:0)-(keys.KeyA?1:0);if(f||r){const n=Math.hypot(f,r),s=6*dt,sy=Math.sin(yaw),cy=Math.cos(yaw);player.position.x+=(r/n*cy+f/n*sy)*s;player.position.z+=(r/n*sy-f/n*cy)*s}for(const v of cars){v.translateZ(-v.userData.speed*dt);if(v.position.z<-180)v.position.z=180}const dist=9,cp=Math.cos(pitch),sp=Math.sin(pitch);camera.position.lerp(new THREE.Vector3(player.position.x+Math.sin(yaw)*dist*cp,player.position.y+3.5+dist*sp,player.position.z+Math.cos(yaw)*dist*cp),.12);camera.lookAt(player.position.x,player.position.y+2,player.position.z);renderer.render(scene,camera)}loop();
 setTimeout(()=>document.getElementById('loading')?.remove(),1200);addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+
+// MAKYREN-015 live HUD/world integration
+const state={cash:500,health:100,inventory:['Phone','Starter Pistol'],mission:'Explore the City'};
+const cashEl=document.getElementById('cash'),healthEl=document.getElementById('health'),invEl=document.getElementById('inventoryItems');
+function refreshUI(){cashEl.textContent='$'+state.cash;healthEl.textContent=state.health+' HP';invEl.innerHTML=state.inventory.map(x=>'<div>• '+x+'</div>').join('')}
+refreshUI();
+const market={x:24,z:24};const marker=new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,5,16),new THREE.MeshBasicMaterial({color:0x59b5ff}));marker.position.set(market.x,2.5,market.z);scene.add(marker);
+let nearMarket=false;function updateInteraction(){const dx=player.position.x-market.x,dz=player.position.z-market.z;nearMarket=Math.hypot(dx,dz)<7;document.getElementById('prompt').textContent=nearMarket?'E — ENTER CITY MARKET':'EXPLORE — Find the blue market marker'}
+function interact(){if(nearMarket){document.getElementById('shop').classList.remove('hidden')}}
+addEventListener('keydown',e=>{if(e.code==='KeyE')interact();if(e.code==='KeyI')document.getElementById('inventory').classList.toggle('hidden')});
+document.getElementById('bag').onclick=()=>document.getElementById('inventory').classList.toggle('hidden');document.getElementById('closeBag').onclick=()=>document.getElementById('inventory').classList.add('hidden');document.getElementById('closeShop').onclick=()=>document.getElementById('shop').classList.add('hidden');document.getElementById('buyMedkit').onclick=()=>{if(state.cash>=100){state.cash-=100;state.inventory.push('Medkit');refreshUI()}else document.getElementById('shopTitle').textContent='NOT ENOUGH CASH'};
+setInterval(updateInteraction,100);
