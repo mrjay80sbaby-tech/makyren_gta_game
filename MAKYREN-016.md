@@ -1,15 +1,17 @@
-# MAKYREN-016 — Combat Presentation Foundation
+# MAKYREN-016 — Vehicle Enter / Drive Foundation
 
-Status: implemented foundation
+Status: implemented
 
-- Procedural pistol/SMG presentation models
-- Muzzle-flash VFX
-- Impact-ring hit feedback
-- Weapon-type runtime metadata
-- Character combat animation state hooks
-- Mobile-friendly geometry and short-lived VFX
-- No external paid assets or dependencies
+- Nearby vehicle detection
+- E key enter / exit interaction
+- Player visibility transition while driving
+- Third-person chase camera
+- Acceleration, reverse, braking drag, and steering
+- Speed-based steering response
+- World boundary protection
+- Desktop keyboard controls
+- Mobile touch driving controls
+- Vehicle proximity prompt
+- Existing traffic generation preserved
 
-This milestone establishes the presentation layer; production-quality authored GLB weapon meshes, animation clips, audio, and advanced particles can be swapped in later without changing the combat API.
-
-Next: MAKYREN-017 — cinematic animation system, weapon attachment, camera shake, and audio feedback.
+Next: MAKYREN-017 — vehicle polish: collisions, speed HUD, lights, engine audio, and traffic behavior.
