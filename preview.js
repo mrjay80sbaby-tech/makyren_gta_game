@@ -110,3 +110,36 @@ function enterVehiclePolished(){
 }
 addEventListener('keydown',e=>{if(e.code==='KeyE')setTimeout(()=>{if(driving)startEngineAudio();else stopEngineAudio()},0)});
 setInterval(()=>{if(driving&&activeCar){const mph=Math.round(Math.abs(activeCar.userData.velocity||0)*3.1);document.getElementById('speedValue').textContent=mph;updateEngineAudio(activeCar.userData.velocity||0)}},80);
+
+
+// MAKYREN-017B — Vehicle lights, collision response, and safer traffic
+const vehicleLights=new WeakMap();
+for(const car of cars){
+ const headMat=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.28});
+ const brakeMat=new THREE.MeshBasicMaterial({color:0xff1111,transparent:true,opacity:.25});
+ const heads=[],brakes=[];
+ for(const x of [-.65,.65]){
+  const h=new THREE.Mesh(new THREE.BoxGeometry(.32,.16,.08),headMat.clone());h.position.set(x,.82,-2.17);car.add(h);heads.push(h);
+  const b=new THREE.Mesh(new THREE.BoxGeometry(.32,.16,.08),brakeMat.clone());b.position.set(x,.82,2.17);car.add(b);brakes.push(b);
+ }
+ vehicleLights.set(car,{heads,brakes});
+}
+function updateVehicleLights(car,braking=false){
+ const set=vehicleLights.get(car);if(!set)return;
+ for(const h of set.heads)h.material.opacity=driving&&car===activeCar?.95:.38;
+ for(const b of set.brakes)b.material.opacity=braking?.98:.28;
+}
+function resolveVehicleCollisions(){
+ for(let i=0;i<cars.length;i++)for(let j=i+1;j<cars.length;j++){
+  const a=cars[i],b=cars[j],dx=b.position.x-a.position.x,dz=b.position.z-a.position.z;
+  const d=Math.hypot(dx,dz),min=3.5;
+  if(d>0&&d<min){const nx=dx/d,nz=dz/d,p=(min-d)*.5;
+   a.position.x-=nx*p;a.position.z-=nz*p;b.position.x+=nx*p;b.position.z+=nz*p;
+   a.userData.velocity=(a.userData.velocity||0)*.55;b.userData.velocity=(b.userData.velocity||0)*.55;
+  }
+ }
+}
+setInterval(()=>{
+ resolveVehicleCollisions();
+ if(driving&&activeCar){const braking=keys.KeyS||keys.ArrowDown||driveInput.reverse;updateVehicleLights(activeCar,braking)}
+},50);
