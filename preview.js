@@ -84,3 +84,29 @@ document.getElementById('bag').onclick=()=>document.getElementById('inventory').
 document.getElementById('closeBag').onclick=()=>document.getElementById('inventory').classList.add('hidden');
 document.getElementById('closeShop').onclick=()=>document.getElementById('shop').classList.add('hidden');
 document.getElementById('buyMedkit').onclick=()=>{if(gameState.cash>=100){gameState.cash-=100;gameState.inventory.push('Medkit');refreshGameUI()}else document.getElementById('shopTitle').textContent='NOT ENOUGH CASH'});
+
+
+// MAKYREN-017 — Vehicle Polish Layer
+const speedHud=document.createElement('div');
+speedHud.id='speedHud';
+speedHud.innerHTML='<b id="speedValue">0</b><small> MPH</small>';
+document.body.appendChild(speedHud);
+const vehicleAudio=typeof AudioContext!=='undefined'?new AudioContext():null;
+let engineOsc=null,engineGain=null;
+function startEngineAudio(){
+ if(!vehicleAudio||engineOsc)return;
+ vehicleAudio.resume?.();
+ engineOsc=vehicleAudio.createOscillator();engineGain=vehicleAudio.createGain();
+ engineOsc.type='sawtooth';engineOsc.frequency.value=55;engineGain.gain.value=.025;
+ engineOsc.connect(engineGain).connect(vehicleAudio.destination);engineOsc.start();
+}
+function stopEngineAudio(){if(engineOsc){engineOsc.stop();engineOsc.disconnect();engineGain.disconnect();engineOsc=null;engineGain=null}}
+function updateEngineAudio(v){if(engineOsc){engineOsc.frequency.value=55+Math.abs(v)*6;engineGain.gain.value=.015+Math.min(.045,Math.abs(v)*.0015)}}
+const originalEnterVehicle=enterVehicle;
+function enterVehiclePolished(){
+ const wasDriving=driving;originalEnterVehicle();
+ if(!wasDriving&&driving){startEngineAudio();speedHud.classList.add('active')}
+ if(wasDriving&&!driving){stopEngineAudio();speedHud.classList.remove('active')}
+}
+addEventListener('keydown',e=>{if(e.code==='KeyE')setTimeout(()=>{if(driving)startEngineAudio();else stopEngineAudio()},0)});
+setInterval(()=>{if(driving&&activeCar){const mph=Math.round(Math.abs(activeCar.userData.velocity||0)*3.1);document.getElementById('speedValue').textContent=mph;updateEngineAudio(activeCar.userData.velocity||0)}},80);
