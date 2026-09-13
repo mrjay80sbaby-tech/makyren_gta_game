@@ -59,6 +59,8 @@ function loop(){
   const desired=new THREE.Vector3(player.position.x+Math.sin(yaw)*dist*cp,player.position.y+3.5+dist*sp,player.position.z+Math.cos(yaw)*dist*cp);
   camera.position.lerp(desired,1-Math.exp(-8*dt));camera.lookAt(player.position.x,player.position.y+2,player.position.z);
  }
+ // Vehicle proximity prompt
+ if(!driving){const n=nearestVehicle();if(n.car&&n.dist<4){vehiclePrompt.textContent='E — ENTER VEHICLE';vehiclePrompt.style.display='block'}else vehiclePrompt.style.display='none'}
  renderer.render(scene,camera)
 }
 loop();
