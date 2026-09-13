@@ -1,14 +1,13 @@
-# MAKYREN-015 — Live Gameplay UI Integration
+# MAKYREN-015 — Live Gameplay UI + World Integration
 
-Status: implemented foundation
+Status: implemented
 
-- HUD action event bridge
-- FIRE -> weapon fire hook
-- MELEE -> melee hook
-- RELOAD -> weapon reload hook
-- BAG -> inventory-open event
-- Interior interaction bridge
-- Mission state/reward bridge
-- Save callback hooks
+- HUD connected to live cash, health, and inventory state
+- FIRE / MELEE / RELOAD / BAG gameplay event bridge preserved
+- Interactive City Market world marker
+- Proximity-based interaction prompt
+- Purchase validation and inventory updates
+- Interior and mission runtime hooks preserved
+- Existing Three.js game loop preserved
 
-The bridge keeps UI and gameplay systems decoupled so future animation, audio, VFX, and Supabase persistence can be integrated without replacing the HUD.
+Next: MAKYREN-016 — Vehicle enter, exit, and driving foundation with mobile controls.
