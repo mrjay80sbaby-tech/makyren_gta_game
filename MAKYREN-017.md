@@ -1,12 +1,12 @@
-# MAKYREN-017 — Cinematic Presentation Layer
+# MAKYREN-017 — Vehicle Polish Layer
 
-Status: implemented foundation
+Status: implemented
 
-- Procedural camera shake controller
-- Weapon attachment transform hook
-- Lightweight Web Audio feedback bus
-- Shot/click sound synthesis
-- Mobile-friendly short-lived effects
-- Decoupled presentation APIs for future authored animation/audio assets
+- Live MPH speed HUD while driving
+- Lightweight synthesized engine feedback
+- Engine pitch responds to vehicle speed
+- Engine audio lifecycle hooks for entering/exiting vehicles
+- Existing chase camera and mobile controls preserved
+- Mobile-friendly implementation with no external assets
 
-Next: MAKYREN-018 — streaming world sectors, occlusion/culling, and performance instrumentation.
+Next: MAKYREN-018 — streaming world sectors, distance culling, and performance instrumentation.
