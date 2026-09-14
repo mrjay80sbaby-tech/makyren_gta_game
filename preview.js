@@ -213,3 +213,48 @@ function updatePedestrians(dt){
 }
 const previousLoopRender=renderer.render.bind(renderer);
 renderer.render=(...args)=>{updatePedestrians(.016);return previousLoopRender(...args)};
+
+
+// MAKYREN-020 — Mission framework and objective progression
+const missionState={active:null,step:0,completed:[]};
+const missionDefinitions=[{
+ id:'first-run',title:'FIRST RUN',
+ steps:[
+  {text:'Go to the meeting point',x:38,z:18,radius:5},
+  {text:'Reach the drop location',x:-42,z:-28,radius:6},
+  {text:'Return to the city market',x:24,z:24,radius:7}
+ ],
+ reward:250
+}];
+const objectiveMarker=new THREE.Group();
+const objectiveRing=new THREE.Mesh(new THREE.TorusGeometry(2.2,.12,10,24),new THREE.MeshBasicMaterial({color:0xffc400}));
+objectiveRing.rotation.x=Math.PI/2;objectiveRing.position.y=.12;
+const objectiveBeam=new THREE.Mesh(new THREE.CylinderGeometry(.35,.35,5,12),new THREE.MeshBasicMaterial({color:0xffc400,transparent:true,opacity:.55}));
+objectiveBeam.position.y=2.5;objectiveMarker.add(objectiveRing,objectiveBeam);objectiveMarker.visible=false;scene.add(objectiveMarker);
+
+function startMission(id='first-run'){
+ const mission=missionDefinitions.find(m=>m.id===id);if(!mission)return;
+ missionState.active=mission;missionState.step=0;setMissionObjective();
+}
+function setMissionObjective(){
+ const mission=missionState.active;if(!mission)return;
+ const step=mission.steps[missionState.step];
+ objectiveMarker.visible=true;objectiveMarker.position.set(step.x,0,step.z);
+ document.getElementById('missionTitle').textContent=mission.title;
+ document.getElementById('missionText').textContent=step.text;
+}
+function updateMission(){
+ const mission=missionState.active;if(!mission)return;
+ const step=mission.steps[missionState.step],focus=driving&&activeCar?activeCar.position:player.position;
+ objectiveMarker.rotation.y+=.025;
+ if(Math.hypot(focus.x-step.x,focus.z-step.z)<=step.radius){
+  missionState.step++;
+  if(missionState.step>=mission.steps.length){
+   gameState.cash+=mission.reward;refreshGameUI();
+   document.getElementById('missionText').textContent='MISSION COMPLETE +$'+mission.reward;
+   missionState.completed.push(mission.id);missionState.active=null;objectiveMarker.visible=false;
+  }else setMissionObjective();
+ }
+}
+setInterval(updateMission,100);
+setTimeout(()=>startMission(),500);
