@@ -1,13 +1,12 @@
-# MAKYREN-019 — Dynamic Population + Performance HUD
+# MAKYREN-019 — Dynamic World Population
 
-Status: implemented foundation
+Status: foundation implemented
 
-- Mobile-aware traffic cap
-- Mobile-aware pedestrian cap
-- Dynamic spawn hooks
-- Distance culling around Ma'Kyren
-- Population statistics
-- Developer performance HUD
-- FPS/draw-call/triangle metrics integration hooks
+- Dynamic pedestrian population
+- Mobile-scaled population limits
+- Pedestrian wandering behavior
+- Distance-based repositioning around the active player area
+- Performance-conscious population caps
+- Existing traffic and vehicle systems preserved
 
-Next: MAKYREN-020 — connect the population controller to the live traffic and pedestrian entities and add ambient city behaviors.
+Next: MAKYREN-020 — mission framework, objective markers, and mission progression.
