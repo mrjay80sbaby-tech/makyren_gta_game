@@ -288,3 +288,43 @@ interactWorld=function(){
  }
  originalWorldInteract();
 };
+
+
+// MAKYREN-022 — Cinematic mission briefing
+const cinematic=document.getElementById('cinematic');
+const dialogueText=document.getElementById('dialogueText');
+const speaker=document.getElementById('speaker');
+let cinematicActive=false,cinematicLines=[],cinematicIndex=0;
+
+function beginCinematic(lines){
+ cinematicLines=lines;cinematicIndex=0;cinematicActive=true;cinematic.classList.remove('hidden');
+ showCinematicLine();
+}
+function showCinematicLine(){
+ const line=cinematicLines[cinematicIndex];if(!line)return endCinematic();
+ speaker.textContent=line.speaker;dialogueText.textContent=line.text;
+}
+function advanceCinematic(){
+ if(!cinematicActive)return false;
+ cinematicIndex++;
+ if(cinematicIndex>=cinematicLines.length)endCinematic();else showCinematicLine();
+ return true;
+}
+function endCinematic(){cinematicActive=false;cinematic.classList.add('hidden')}
+const missionBriefing=[
+ {speaker:'CONTACT',text:'Ma’Kyren. You made it. Keep your head down and listen.'},
+ {speaker:'CONTACT',text:'There is a meeting across town. Get there clean. No distractions.'},
+ {speaker:'MA’KYREN',text:'I hear you. I’m on my way.'}
+];
+const priorInteractWorld=interactWorld;
+interactWorld=function(){
+ if(cinematicActive){advanceCinematic();return}
+ const focus=driving&&activeCar?activeCar.position:player.position;
+ if(!missionState.active&&!missionState.completed.includes('first-run')&&focus.distanceTo(missionGiver.position)<4){
+  beginCinematic(missionBriefing);
+  const wait=setInterval(()=>{if(!cinematicActive){clearInterval(wait);startMission('first-run')}},100);
+  return;
+ }
+ priorInteractWorld();
+};
+addEventListener('keydown',e=>{if(e.code==='KeyE'&&cinematicActive)advanceCinematic()});
