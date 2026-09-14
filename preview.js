@@ -188,3 +188,28 @@ if(mobile){
  renderer.shadowMap.autoUpdate=false;
  renderer.shadowMap.needsUpdate=true;
 }
+
+
+// MAKYREN-019 — Dynamic world population
+const worldPopulation={lastSpawn:0,maxTraffic:mobile?18:32,maxPeds:mobile?14:26,pedestrians:[]};
+function makePedestrian(){
+ const g=new THREE.Group();
+ const body=new THREE.Mesh(new THREE.CapsuleGeometry(.28,.65,6,10),new THREE.MeshStandardMaterial({color:Math.random()*0xffffff}));
+ body.position.y=1.05;g.add(body);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.25,12,10),new THREE.MeshStandardMaterial({color:0x9a6549}));
+ head.position.y=1.8;g.add(head);
+ g.position.set((Math.random()-.5)*180,0,(Math.random()-.5)*180);
+ g.userData.direction=new THREE.Vector3(Math.random()-.5,0,Math.random()-.5).normalize();
+ g.userData.speed=.8+Math.random()*1.2;scene.add(g);return g;
+}
+while(worldPopulation.pedestrians.length<worldPopulation.maxPeds)worldPopulation.pedestrians.push(makePedestrian());
+function updatePedestrians(dt){
+ const focus=driving&&activeCar?activeCar.position:player.position;
+ for(const p of worldPopulation.pedestrians){
+  if(p.position.distanceTo(focus)>220){p.position.copy(focus).add(new THREE.Vector3((Math.random()-.5)*120,0,(Math.random()-.5)*120))}
+  p.position.addScaledVector(p.userData.direction,p.userData.speed*dt);
+  if(Math.random()<.004)p.userData.direction.applyAxisAngle(new THREE.Vector3(0,1,0),(Math.random()-.5)*1.8);
+ }
+}
+const previousLoopRender=renderer.render.bind(renderer);
+renderer.render=(...args)=>{const dtPop=Math.min(clock.getDelta(),.02);updatePedestrians(dtPop);return previousLoopRender(...args)};
