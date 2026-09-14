@@ -257,7 +257,7 @@ function updateMission(){
  }
 }
 setInterval(updateMission,100);
-setTimeout(()=>startMission(),500);
+
 
 
 // MAKYREN-021 — Mission giver and cinematic mission presentation
