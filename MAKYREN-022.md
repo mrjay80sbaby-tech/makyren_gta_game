@@ -1,15 +1,13 @@
-# MAKYREN-022 — World Clock + Day/Night
+# MAKYREN-022 — Cinematic Mission Presentation
 
-Status: implemented foundation
+Status: implemented
 
-- Accelerated in-game world clock
-- 24-hour time state
-- Day/night detection
-- Dynamic sun position and intensity
-- Atmospheric background/fog adjustment
-- Traffic-light integration hook
-- Night vehicle-light state hook
-- Night pedestrian behavior state
-- Designed for main-loop integration without replacing existing systems
+- Letterbox cinematic presentation
+- Dialogue panel
+- Speaker identification
+- Multi-line mission briefing sequences
+- Player-controlled dialogue progression
+- Mission starts after the cinematic briefing completes
+- FIRST RUN now has a story introduction
 
-Next: MAKYREN-023 — integrate the clock into the live renderer/game loop and add dynamic street lighting, vehicle headlights, and ambient lighting.
+Next: MAKYREN-023 — mission fail states, checkpoints, and restart flow.
