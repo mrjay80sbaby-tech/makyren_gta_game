@@ -143,3 +143,48 @@ setInterval(()=>{
  resolveVehicleCollisions();
  if(driving&&activeCar){const braking=keys.KeyS||keys.ArrowDown||driveInput.reverse;updateVehicleLights(activeCar,braking)}
 },50);
+
+
+// MAKYREN-018 — Open-world performance foundation
+const performanceHud=document.createElement('div');
+performanceHud.id='performanceHud';
+performanceHud.style.cssText='position:fixed;right:14px;bottom:14px;padding:7px 10px;background:#05080dcc;border:1px solid #ffffff14;border-radius:7px;font:10px system-ui;color:#9fb2c4;z-index:20';
+document.body.appendChild(performanceHud);
+
+const performanceState={frames:0,last:performance.now(),fps:60,culled:0};
+const cullable=[];
+scene.traverse(obj=>{if(obj.isMesh&&obj!==ground)cullable.push(obj)});
+
+function updateWorldCulling(){
+ const focus=driving&&activeCar?activeCar.position:player.position;
+ const maxDistance=mobile?150:230;
+ let culled=0;
+ for(const obj of cullable){
+  if(!obj.userData.worldCullDistance)obj.userData.worldCullDistance=maxDistance;
+  const d=obj.getWorldPosition(new THREE.Vector3()).distanceTo(focus);
+  const visible=d<obj.userData.worldCullDistance;
+  obj.visible=visible;
+  if(!visible)culled++;
+ }
+ performanceState.culled=culled;
+}
+
+function updatePerformance(){
+ performanceState.frames++;
+ const now=performance.now(),elapsed=now-performanceState.last;
+ if(elapsed>=500){
+  performanceState.fps=Math.round(performanceState.frames*1000/elapsed);
+  performanceState.frames=0;performanceState.last=now;
+  performanceHud.textContent='FPS '+performanceState.fps+'  •  OPT '+performanceState.culled+' CULLED';
+ }
+}
+
+let cullTick=0;
+setInterval(()=>{updateWorldCulling();},250);
+const originalRender=renderer.render.bind(renderer);
+renderer.render=(...args)=>{updatePerformance();return originalRender(...args)};
+
+if(mobile){
+ renderer.shadowMap.autoUpdate=false;
+ renderer.shadowMap.needsUpdate=true;
+}
