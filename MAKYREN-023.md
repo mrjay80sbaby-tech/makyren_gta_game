@@ -1,17 +1,12 @@
-# MAKYREN-023 — Cinematic Visual Quality Pass
+# MAKYREN-023 — Mission Checkpoints + Restart Flow
 
-Status: implemented foundation
+Status: foundation implemented
 
-- ACES cinematic tone mapping
-- sRGB output
-- Adaptive mobile/desktop resolution
-- Procedural gradient sky
-- Atmospheric fog tuning
-- Shadow/receive-shadow pass
-- PBR material normalization hooks
-- Road/curb detail layer
-- Zero-cost procedural implementation
+- Automatic mission-step checkpoints
+- Player or vehicle position checkpointing
+- Cash state checkpointing
+- Mission fail/restart function
+- Automatic objective restoration after restart
+- Foundation for timed objectives and failure conditions
 
-Target: substantially stronger visual presentation while preserving the $0 mobile-first constraint. This is an AAA-inspired web renderer, not literal Unreal Engine 5 rendering.
-
-Next: MAKYREN-024 — dynamic lighting, street lamps, and vehicle headlights driven by the world clock.
+Next: MAKYREN-024 — wanted level and police response system.
