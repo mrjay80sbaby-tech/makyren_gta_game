@@ -1,13 +1,12 @@
-# MAKYREN-021 — Traffic + District Activity
+# MAKYREN-021 — Mission Givers + Mission Start Presentation
 
-Status: implemented foundation
+Status: foundation implemented
 
-- Traffic signal state machine
-- Green/yellow/red cycles
-- Vehicle permission checks
-- Pedestrian crossing checks
-- District activity profiles
-- Time-of-day population/traffic modifiers
-- Downtown, industrial, and suburban profiles
+- Physical NPC mission giver placed in the city
+- Floating mission indicator
+- Proximity detection
+- TALK TO CONTACT interaction
+- Mission now starts through the world interaction instead of automatically
+- Mission HUD transitions into FIRST RUN objectives
 
-Next: MAKYREN-022 — connect traffic signals to live vehicles/pedestrians and add a world clock/day-night cycle.
+Next: MAKYREN-022 — cinematic camera moments, dialogue panel, and mission briefing sequence.
