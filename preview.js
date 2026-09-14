@@ -328,3 +328,28 @@ interactWorld=function(){
  priorInteractWorld();
 };
 addEventListener('keydown',e=>{if(e.code==='KeyE'&&cinematicActive)advanceCinematic()});
+
+
+// MAKYREN-023 — Mission checkpoints and restart flow
+const missionCheckpoint={position:null,cash:0};
+function saveMissionCheckpoint(){
+ if(!missionState.active)return;
+ const focus=driving&&activeCar?activeCar.position:player.position;
+ missionCheckpoint.position=focus.clone();missionCheckpoint.cash=gameState.cash;
+}
+function failMission(reason='MISSION FAILED'){
+ if(!missionState.active)return;
+ document.getElementById('missionTitle').textContent=reason;
+ document.getElementById('missionText').textContent='Restarting from checkpoint...';
+ objectiveMarker.visible=false;
+ setTimeout(()=>{
+  if(missionCheckpoint.position){
+   if(driving&&activeCar)activeCar.position.copy(missionCheckpoint.position);
+   else player.position.copy(missionCheckpoint.position);
+   gameState.cash=missionCheckpoint.cash;refreshGameUI();
+  }
+  setMissionObjective();
+ },1200);
+}
+const originalSetMissionObjective=setMissionObjective;
+setMissionObjective=function(){originalSetMissionObjective();saveMissionCheckpoint()};
