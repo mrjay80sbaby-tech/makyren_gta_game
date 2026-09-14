@@ -258,3 +258,33 @@ function updateMission(){
 }
 setInterval(updateMission,100);
 setTimeout(()=>startMission(),500);
+
+
+// MAKYREN-021 — Mission giver and cinematic mission presentation
+const missionGiver=new THREE.Group();
+const giverBody=new THREE.Mesh(new THREE.CapsuleGeometry(.35,.8,6,12),new THREE.MeshStandardMaterial({color:0x16243b}));
+giverBody.position.y=1.15;missionGiver.add(giverBody);
+const giverHead=new THREE.Mesh(new THREE.SphereGeometry(.3,16,12),new THREE.MeshStandardMaterial({color:0x8b5a3c}));
+giverHead.position.y=2.05;missionGiver.add(giverHead);
+missionGiver.position.set(-12,0,16);scene.add(missionGiver);
+const giverMarker=new THREE.Mesh(new THREE.ConeGeometry(.55,1.1,12),new THREE.MeshBasicMaterial({color:0x59b5ff}));
+giverMarker.position.y=3.4;missionGiver.add(giverMarker);
+
+function updateMissionGiver(){
+ if(missionState.active||missionState.completed.includes('first-run'))return;
+ const focus=driving&&activeCar?activeCar.position:player.position;
+ const near=focus.distanceTo(missionGiver.position)<4;
+ if(near){promptEl.textContent='E — TALK TO CONTACT';promptEl.style.display='block'}
+}
+const missionGiverTimer=setInterval(updateMissionGiver,100);
+const originalWorldInteract=interactWorld;
+interactWorld=function(){
+ const focus=driving&&activeCar?activeCar.position:player.position;
+ if(!missionState.active&&!missionState.completed.includes('first-run')&&focus.distanceTo(missionGiver.position)<4){
+  document.getElementById('missionTitle').textContent='NEW MISSION';
+  document.getElementById('missionText').textContent='FIRST RUN — Get to the meeting point';
+  startMission('first-run');
+  return;
+ }
+ originalWorldInteract();
+};
