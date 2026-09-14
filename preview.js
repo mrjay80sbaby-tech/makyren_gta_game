@@ -212,4 +212,4 @@ function updatePedestrians(dt){
  }
 }
 const previousLoopRender=renderer.render.bind(renderer);
-renderer.render=(...args)=>{const dtPop=Math.min(clock.getDelta(),.02);updatePedestrians(dtPop);return previousLoopRender(...args)};
+renderer.render=(...args)=>{updatePedestrians(.016);return previousLoopRender(...args)};
