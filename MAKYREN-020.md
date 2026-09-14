@@ -1,13 +1,15 @@
-# MAKYREN-020 — Ambient City Integration
+# MAKYREN-020 — Mission Framework + Objective Progression
 
-Status: implemented foundation
+Status: implemented
 
-- Population controller integration hook
-- Live traffic behavior loop
-- Variable traffic speeds
-- Pedestrian wandering behavior
-- Distance-based population updates
-- Ambient behavior timers
-- Runtime statistics bridge
+- Mission definition system
+- Multi-step objective sequences
+- Animated world objective marker
+- Player or vehicle objective detection
+- HUD objective updates
+- Mission completion state
+- Cash rewards
+- Completed mission tracking
+- First playable mission: FIRST RUN
 
-Next: MAKYREN-021 — connect ambient city behavior to the main game loop and add traffic lights, pedestrian crossing logic, and district activity states.
+Next: MAKYREN-021 — mission start triggers, cinematic mission presentation, and NPC mission givers.
