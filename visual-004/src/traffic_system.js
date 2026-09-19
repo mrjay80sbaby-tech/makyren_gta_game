@@ -13,6 +13,12 @@ const waitForScene = () => new Promise((resolve, reject) => {
 const scene = await waitForScene();
 const quality = window.MakyrenVisualQuality?.preset || 'high';
 const mobile = quality === 'mobile';
+const districtForZ = z => Math.abs(z) < 10 ? 'downtown' : (z < 0 ? 'southside' : 'northside');
+const districtProfile = {
+  downtown: { speed: .78, pedestrian: 1.12, label: 'Downtown' },
+  southside: { speed: 1.02, pedestrian: .92, label: 'Southside' },
+  northside: { speed: .9, pedestrian: 1.0, label: 'Northside' },
+};
 const traffic = scene.meshes.filter(mesh => mesh.name.startsWith('ambient_vehicle'));
 const playerVehicle = scene.getMeshByName('vehicle');
 
@@ -87,7 +93,9 @@ for (let i = 0; i < pedestrianCount; i++) {
   head.parent = root;
   const side = i % 2 === 0 ? -1 : 1;
   root.position.set(side * 10.25, 0, -28 + i * 18);
-  root.metadata = { pedestrian: true, speed: .75 + i * .08, direction: i % 2 === 0 ? 1 : -1, phase: i * 1.7 };
+  const district = districtForZ(-28 + i * 18);
+  const profile = districtProfile[district];
+  root.metadata = { pedestrian: true, speed: (.75 + i * .08) * profile.pedestrian, direction: i % 2 === 0 ? 1 : -1, phase: i * 1.7, district };
   pedestrians.push(root);
 }
 
@@ -127,7 +135,10 @@ scene.onBeforeRenderObservable.add(() => {
 
   for (const vehicle of traffic) {
     const laneDirection = vehicle.position.x < 0 ? 1 : -1;
-    vehicle.metadata = { ...(vehicle.metadata || {}), traffic: true, laneDirection, signalPhase: signalState.phase };
+    const district = districtForZ(vehicle.position.z);
+    const profile = districtProfile[district];
+    const baseSpeed = vehicle.metadata?.baseSpeed ?? (2.2 + traffic.indexOf(vehicle) * .45);
+    vehicle.metadata = { ...(vehicle.metadata || {}), traffic: true, laneDirection, signalPhase: signalState.phase, district, districtLabel: profile.label, targetSpeed: baseSpeed * profile.speed };
     const distanceToPlayer = playerVehicle ? Vector3.Distance(vehicle.position, playerVehicle.position) : Infinity;
     if (playerVehicle && distanceToPlayer < 3.8) {
       const away = vehicle.position.x >= playerVehicle.position.x ? 1 : -1;
@@ -168,10 +179,14 @@ scene.onBeforeRenderObservable.add(() => {
 });
 
 window.MakyrenTraffic = {
-  version: '028',
+  version: '029',
   vehicles: traffic,
   pedestrians,
   signals: signalState,
+  districts: districtProfile,
+  get districtCounts() {
+    return traffic.reduce((counts, vehicle) => { const district = vehicle.metadata?.district || districtForZ(vehicle.position.z); counts[district] = (counts[district] || 0) + 1; return counts; }, {});
+  },
   get nearestVehicleDistance() {
     if (!playerVehicle) return Infinity;
     return traffic.reduce((nearest, vehicle) => Math.min(nearest, Vector3.Distance(vehicle.position, playerVehicle.position)), Infinity);
