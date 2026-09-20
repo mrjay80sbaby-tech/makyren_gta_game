@@ -21,6 +21,8 @@ const districtProfile = {
 };
 const traffic = scene.meshes.filter(mesh => mesh.name.startsWith('ambient_vehicle'));
 const playerVehicle = scene.getMeshByName('vehicle');
+const playerRoot = scene.getTransformNodeByName('player_root');
+const collisionState = { active: false, lastImpact: 0, impacts: 0 };
 
 const signalState = { phase: 'green', elapsed: 0 };
 const signalCycle = [
@@ -166,6 +168,35 @@ scene.onBeforeRenderObservable.add(() => {
     animationHooks.update(pedestrian, dt);
   }
 
+  if (playerVehicle) {
+    for (const vehicle of traffic) {
+      const dx = vehicle.position.x - playerVehicle.position.x;
+      const dz = vehicle.position.z - playerVehicle.position.z;
+      if (Math.abs(dx) < 1.65 && Math.abs(dz) < 2.65) {
+        const push = dx >= 0 ? .12 : -.12;
+        vehicle.position.x += push;
+        playerVehicle.position.x -= push * .45;
+        collisionState.active = true;
+        collisionState.lastImpact = performance.now();
+        collisionState.impacts += 1;
+      }
+    }
+  }
+  if (playerRoot && !playerVehicle?.isEnabled()) {
+    for (const vehicle of traffic) {
+      const distance = Vector3.Distance(vehicle.position, playerRoot.position);
+      if (distance < 1.25) {
+        const dx = playerRoot.position.x - vehicle.position.x;
+        const dz = playerRoot.position.z - vehicle.position.z;
+        const len = Math.max(.001, Math.hypot(dx, dz));
+        playerRoot.position.x += (dx / len) * .08;
+        playerRoot.position.z += (dz / len) * .08;
+        collisionState.active = true;
+        collisionState.lastImpact = performance.now();
+      }
+    }
+  }
+  if (performance.now() - collisionState.lastImpact > 350) collisionState.active = false;
   const nearestTraffic = traffic.reduce((nearest, vehicle) => {
     if (!playerVehicle) return nearest;
     return Math.min(nearest, Vector3.Distance(vehicle.position, playerVehicle.position));
@@ -179,7 +210,8 @@ scene.onBeforeRenderObservable.add(() => {
 });
 
 window.MakyrenTraffic = {
-  version: '029',
+  version: '030',
+  collision: collisionState,
   vehicles: traffic,
   pedestrians,
   signals: signalState,
