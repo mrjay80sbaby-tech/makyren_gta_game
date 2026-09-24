@@ -182,7 +182,7 @@ scene.onBeforeRenderObservable.add(() => {
       }
     }
   }
-  if (playerRoot && !playerVehicle?.isEnabled()) {
+  if (playerRoot?.isEnabled()) {
     for (const vehicle of traffic) {
       const distance = Vector3.Distance(vehicle.position, playerRoot.position);
       if (distance < 1.25) {
