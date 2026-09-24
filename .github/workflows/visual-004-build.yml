@@ -1,0 +1,32 @@
+name: Visual-004 Build
+
+on:
+  push:
+    paths:
+      - 'visual-004/**'
+      - '.github/workflows/visual-004-build.yml'
+  pull_request:
+    paths:
+      - 'visual-004/**'
+      - '.github/workflows/visual-004-build.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: visual-004
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: visual-004/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Build Visual-004
+        run: npm run build
