@@ -157,8 +157,8 @@ scene.onBeforeRenderObservable.add(() => {
       const stopZ = laneDirection > 0 ? -3.15 : .15;
       vehicle.speed = 0;
       vehicle.metadata.targetSpeed = 0;
-      if (laneDirection > 0) vehicle.position.z = Math.max(vehicle.position.z, stopZ);
-      else vehicle.position.z = Math.min(vehicle.position.z, stopZ);
+      if (laneDirection > 0) vehicle.position.z = Math.min(vehicle.position.z, stopZ);
+      else vehicle.position.z = Math.max(vehicle.position.z, stopZ);
     }
   }
 
