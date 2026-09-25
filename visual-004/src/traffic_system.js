@@ -240,7 +240,7 @@ scene.onBeforeRenderObservable.add(() => {
   if (nearestTraffic < 5) {
     proximityHud.style.display = 'block';
     proximityHud.textContent = onFoot
-      ? 'PEDESTRIAN PROXIMITY'
+      ? (nearestTraffic < 1.05 ? 'PEDESTRIAN PROXIMITY • COLLISION RISK' : 'PEDESTRIAN PROXIMITY')
       : (nearestTraffic < 2.35 ? 'TRAFFIC PROXIMITY • BRAKING' : 'TRAFFIC PROXIMITY');
   } else {
     proximityHud.style.display = 'none';
@@ -248,7 +248,7 @@ scene.onBeforeRenderObservable.add(() => {
 });
 
 window.MakyrenTraffic = {
-  version: '038',
+  version: '039',
   collision: collisionState,
   vehicles: traffic,
   pedestrians,
