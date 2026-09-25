@@ -134,6 +134,8 @@ scene.onBeforeRenderObservable.add(() => {
     signalState.elapsed = 0;
     const nextIndex = (signalCycle.findIndex(item => item.phase === signalState.phase) + 1) % signalCycle.length;
     setSignal(signalCycle[nextIndex].phase);
+    const nextPhase = signalCycle[nextIndex];
+    signalState.remaining = nextPhase ? nextPhase.duration : 0;
   }
 
   for (const vehicle of traffic) {
@@ -235,7 +237,7 @@ scene.onBeforeRenderObservable.add(() => {
 });
 
 window.MakyrenTraffic = {
-  version: '031',
+  version: '032',
   collision: collisionState,
   vehicles: traffic,
   pedestrians,
