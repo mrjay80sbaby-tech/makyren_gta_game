@@ -129,6 +129,7 @@ let elapsed = 0;
 let proximityVisible = false;
 let lastProximityText = '';
 scene.onBeforeRenderObservable.add(() => {
+  const now = performance.now();
   const dt = Math.min(.1, scene.getEngine().getDeltaTime() / 1000);
   elapsed += dt;
   signalState.elapsed += dt;
@@ -196,7 +197,7 @@ scene.onBeforeRenderObservable.add(() => {
         vehicle.position.x += push;
         playerVehicle.position.x -= push * .45;
         collisionState.active = true;
-        collisionState.lastImpact = performance.now();
+        collisionState.lastImpact = now;
         collisionState.lastType = 'vehicle';
         collisionState.impacts += 1;
       }
@@ -212,7 +213,7 @@ scene.onBeforeRenderObservable.add(() => {
         playerRoot.position.x += (dx / len) * .07;
         playerRoot.position.z += (dz / len) * .07;
         collisionState.active = true;
-        collisionState.lastImpact = performance.now();
+        collisionState.lastImpact = now;
         collisionState.impacts++;
         collisionState.lastType = 'pedestrian';
       }
@@ -226,13 +227,13 @@ scene.onBeforeRenderObservable.add(() => {
         playerRoot.position.x += (dx / len) * .08;
         playerRoot.position.z += (dz / len) * .08;
         collisionState.active = true;
-        collisionState.lastImpact = performance.now();
+        collisionState.lastImpact = now;
         collisionState.impacts++;
         collisionState.lastType = 'vehicle';
       }
     }
   }
-  if (performance.now() - collisionState.lastImpact > 350) {
+  if (now - collisionState.lastImpact > 350) {
     collisionState.active = false;
     collisionState.lastType = null;
   }
