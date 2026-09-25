@@ -140,7 +140,9 @@ scene.onBeforeRenderObservable.add(() => {
     const district = districtForZ(vehicle.position.z);
     const profile = districtProfile[district];
     const baseSpeed = vehicle.metadata?.baseSpeed ?? (2.2 + traffic.indexOf(vehicle) * .45);
-    vehicle.metadata = { ...(vehicle.metadata || {}), traffic: true, laneDirection, signalPhase: signalState.phase, district, districtLabel: profile.label, targetSpeed: baseSpeed * profile.speed };
+    const targetSpeed = baseSpeed * profile.speed;
+    vehicle.speed = targetSpeed;
+    vehicle.metadata = { ...(vehicle.metadata || {}), traffic: true, laneDirection, signalPhase: signalState.phase, district, districtLabel: profile.label, targetSpeed };
     const distanceToPlayer = playerVehicle ? Vector3.Distance(vehicle.position, playerVehicle.position) : Infinity;
     if (playerVehicle && distanceToPlayer < 3.8) {
       const away = vehicle.position.x >= playerVehicle.position.x ? 1 : -1;
