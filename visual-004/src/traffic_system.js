@@ -122,6 +122,7 @@ window.MakyrenAnimationHooks = animationHooks;
 const proximityHud = document.createElement('div');
 proximityHud.id = 'traffic-proximity-hud';
 proximityHud.style.cssText = 'position:fixed;right:12px;bottom:12px;z-index:7;padding:7px 9px;border:1px solid #ffffff22;border-radius:8px;background:#07101dcc;color:#fff;font:600 11px system-ui;display:none;pointer-events:none;';
+proximityHud.setAttribute('aria-live', 'polite');
 document.body.appendChild(proximityHud);
 
 let elapsed = 0;
@@ -240,7 +241,6 @@ scene.onBeforeRenderObservable.add(() => {
     proximityHud.textContent = onFoot
       ? (nearestTraffic < 1.05 ? 'PEDESTRIAN PROXIMITY • COLLISION RISK' : 'PEDESTRIAN PROXIMITY')
       : (nearestTraffic < 2.35 ? 'TRAFFIC PROXIMITY • BRAKING' : 'TRAFFIC PROXIMITY');
-    proximityHud.setAttribute('aria-live', 'polite');
   } else {
     proximityHud.style.display = 'none';
   }
