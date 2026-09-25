@@ -238,7 +238,7 @@ scene.onBeforeRenderObservable.add(() => {
 });
 
 window.MakyrenTraffic = {
-  version: '033',
+  version: '034',
   collision: collisionState,
   vehicles: traffic,
   pedestrians,
@@ -253,5 +253,9 @@ window.MakyrenTraffic = {
   get nearestVehicleDistance() {
     if (!playerVehicle) return Infinity;
     return traffic.reduce((nearest, vehicle) => Math.min(nearest, Vector3.Distance(vehicle.position, playerVehicle.position)), Infinity);
+  },
+  get nearestPedestrianDistance() {
+    if (!playerRoot?.isEnabled()) return Infinity;
+    return pedestrians.reduce((nearest, pedestrian) => Math.min(nearest, Vector3.Distance(pedestrian.position, playerRoot.position)), Infinity);
   },
 };
