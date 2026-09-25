@@ -195,6 +195,18 @@ scene.onBeforeRenderObservable.add(() => {
     }
   }
   if (playerRoot?.isEnabled()) {
+    for (const pedestrian of pedestrians) {
+      const dx = playerRoot.position.x - pedestrian.position.x;
+      const dz = playerRoot.position.z - pedestrian.position.z;
+      const distance = Math.hypot(dx, dz);
+      if (distance < 1.05) {
+        const len = Math.max(.001, distance);
+        playerRoot.position.x += (dx / len) * .07;
+        playerRoot.position.z += (dz / len) * .07;
+        collisionState.active = true;
+        collisionState.lastImpact = performance.now();
+      }
+    }
     for (const vehicle of traffic) {
       const distance = Vector3.Distance(vehicle.position, playerRoot.position);
       if (distance < 1.25) {
