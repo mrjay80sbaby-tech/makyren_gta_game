@@ -235,11 +235,8 @@ scene.onBeforeRenderObservable.add(() => {
   }
   const onFoot = playerRoot?.isEnabled();
   const nearestTraffic = onFoot
-    ? pedestrians.reduce((nearest, pedestrian) => Math.min(nearest, Vector3.Distance(pedestrian.position, playerRoot.position)), Infinity)
-    : traffic.reduce((nearest, vehicle) => {
-        if (!playerVehicle) return nearest;
-        return Math.min(nearest, Vector3.Distance(vehicle.position, playerVehicle.position));
-      }, Infinity);
+    ? window.MakyrenTraffic.nearestTrafficDistance
+    : window.MakyrenTraffic.nearestTrafficDistance;
   if (nearestTraffic < 5) {
     proximityHud.style.display = 'block';
     proximityHud.textContent = onFoot
