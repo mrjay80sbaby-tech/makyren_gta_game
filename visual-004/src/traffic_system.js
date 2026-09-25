@@ -234,9 +234,7 @@ scene.onBeforeRenderObservable.add(() => {
     collisionState.lastType = null;
   }
   const onFoot = playerRoot?.isEnabled();
-  const nearestTraffic = onFoot
-    ? window.MakyrenTraffic.nearestTrafficDistance
-    : window.MakyrenTraffic.nearestTrafficDistance;
+  const nearestTraffic = window.MakyrenTraffic.nearestTrafficDistance;
   if (nearestTraffic < 5) {
     proximityHud.style.display = 'block';
     proximityHud.textContent = onFoot
