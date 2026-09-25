@@ -126,6 +126,8 @@ proximityHud.setAttribute('aria-live', 'polite');
 document.body.appendChild(proximityHud);
 
 let elapsed = 0;
+let proximityVisible = false;
+let lastProximityText = '';
 scene.onBeforeRenderObservable.add(() => {
   const dt = Math.min(.1, scene.getEngine().getDeltaTime() / 1000);
   elapsed += dt;
@@ -237,12 +239,21 @@ scene.onBeforeRenderObservable.add(() => {
   const onFoot = playerRoot?.isEnabled();
   const nearestTraffic = window.MakyrenTraffic.nearestTrafficDistance;
   if (nearestTraffic < 5) {
-    proximityHud.style.display = 'block';
-    proximityHud.textContent = onFoot
+    const proximityText = onFoot
       ? (nearestTraffic < 1.05 ? 'PEDESTRIAN PROXIMITY • COLLISION RISK' : 'PEDESTRIAN PROXIMITY')
       : (nearestTraffic < 2.35 ? 'TRAFFIC PROXIMITY • BRAKING' : 'TRAFFIC PROXIMITY');
-  } else {
+    if (!proximityVisible) {
+      proximityHud.style.display = 'block';
+      proximityVisible = true;
+    }
+    if (proximityText !== lastProximityText) {
+      proximityHud.textContent = proximityText;
+      lastProximityText = proximityText;
+    }
+  } else if (proximityVisible) {
     proximityHud.style.display = 'none';
+    proximityVisible = false;
+    lastProximityText = '';
   }
 });
 
