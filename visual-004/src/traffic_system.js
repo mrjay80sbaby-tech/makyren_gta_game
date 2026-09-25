@@ -197,7 +197,7 @@ scene.onBeforeRenderObservable.add(() => {
         playerVehicle.position.x -= push * .45;
         collisionState.active = true;
         collisionState.lastImpact = performance.now();
-        collisionState.lastType = 'pedestrian';
+        collisionState.lastType = 'vehicle';
         collisionState.impacts += 1;
       }
     }
