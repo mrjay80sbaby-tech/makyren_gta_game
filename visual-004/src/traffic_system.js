@@ -245,13 +245,14 @@ scene.onBeforeRenderObservable.add(() => {
     proximityHud.textContent = onFoot
       ? (nearestTraffic < 1.05 ? 'PEDESTRIAN PROXIMITY • COLLISION RISK' : 'PEDESTRIAN PROXIMITY')
       : (nearestTraffic < 2.35 ? 'TRAFFIC PROXIMITY • BRAKING' : 'TRAFFIC PROXIMITY');
+    proximityHud.setAttribute('aria-live', 'polite');
   } else {
     proximityHud.style.display = 'none';
   }
 });
 
 window.MakyrenTraffic = {
-  version: '040',
+  version: '041',
   collision: collisionState,
   vehicles: traffic,
   pedestrians,
