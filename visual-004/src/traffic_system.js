@@ -230,20 +230,25 @@ scene.onBeforeRenderObservable.add(() => {
     collisionState.active = false;
     collisionState.lastType = null;
   }
-  const nearestTraffic = traffic.reduce((nearest, vehicle) => {
-    if (!playerVehicle) return nearest;
-    return Math.min(nearest, Vector3.Distance(vehicle.position, playerVehicle.position));
-  }, Infinity);
+  const onFoot = playerRoot?.isEnabled();
+  const nearestTraffic = onFoot
+    ? pedestrians.reduce((nearest, pedestrian) => Math.min(nearest, Vector3.Distance(pedestrian.position, playerRoot.position)), Infinity)
+    : traffic.reduce((nearest, vehicle) => {
+        if (!playerVehicle) return nearest;
+        return Math.min(nearest, Vector3.Distance(vehicle.position, playerVehicle.position));
+      }, Infinity);
   if (nearestTraffic < 5) {
     proximityHud.style.display = 'block';
-    proximityHud.textContent = nearestTraffic < 2.35 ? 'TRAFFIC PROXIMITY • BRAKING' : 'TRAFFIC PROXIMITY';
+    proximityHud.textContent = onFoot
+      ? 'PEDESTRIAN PROXIMITY'
+      : (nearestTraffic < 2.35 ? 'TRAFFIC PROXIMITY • BRAKING' : 'TRAFFIC PROXIMITY');
   } else {
     proximityHud.style.display = 'none';
   }
 });
 
 window.MakyrenTraffic = {
-  version: '037',
+  version: '038',
   collision: collisionState,
   vehicles: traffic,
   pedestrians,
