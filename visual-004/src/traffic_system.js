@@ -22,7 +22,7 @@ const districtProfile = {
 const traffic = scene.meshes.filter(mesh => mesh.name.startsWith('ambient_vehicle'));
 const playerVehicle = scene.getMeshByName('vehicle');
 const playerRoot = scene.getTransformNodeByName('player_root');
-const collisionState = { active: false, lastImpact: 0, impacts: 0 };
+const collisionState = { active: false, lastImpact: 0, impacts: 0, lastType: null };
 
 const signalState = { phase: 'green', elapsed: 0, remaining: 7 };
 const signalCycle = [
@@ -194,6 +194,7 @@ scene.onBeforeRenderObservable.add(() => {
         playerVehicle.position.x -= push * .45;
         collisionState.active = true;
         collisionState.lastImpact = performance.now();
+        collisionState.lastType = 'pedestrian';
         collisionState.impacts += 1;
       }
     }
@@ -221,6 +222,7 @@ scene.onBeforeRenderObservable.add(() => {
         playerRoot.position.z += (dz / len) * .08;
         collisionState.active = true;
         collisionState.lastImpact = performance.now();
+        collisionState.lastType = 'vehicle';
       }
     }
   }
@@ -238,7 +240,7 @@ scene.onBeforeRenderObservable.add(() => {
 });
 
 window.MakyrenTraffic = {
-  version: '034',
+  version: '035',
   collision: collisionState,
   vehicles: traffic,
   pedestrians,
