@@ -155,6 +155,8 @@ scene.onBeforeRenderObservable.add(() => {
       : vehicle.position.z > -1.5 && vehicle.position.z < 5;
     if (signalState.phase === 'red' && approachingCrosswalk) {
       const stopZ = laneDirection > 0 ? -3.15 : .15;
+      vehicle.speed = 0;
+      vehicle.metadata.targetSpeed = 0;
       if (laneDirection > 0) vehicle.position.z = Math.max(vehicle.position.z, stopZ);
       else vehicle.position.z = Math.min(vehicle.position.z, stopZ);
     }
