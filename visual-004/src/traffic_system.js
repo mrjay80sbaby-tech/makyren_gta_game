@@ -226,7 +226,10 @@ scene.onBeforeRenderObservable.add(() => {
       }
     }
   }
-  if (performance.now() - collisionState.lastImpact > 350) collisionState.active = false;
+  if (performance.now() - collisionState.lastImpact > 350) {
+    collisionState.active = false;
+    collisionState.lastType = null;
+  }
   const nearestTraffic = traffic.reduce((nearest, vehicle) => {
     if (!playerVehicle) return nearest;
     return Math.min(nearest, Vector3.Distance(vehicle.position, playerVehicle.position));
@@ -240,7 +243,7 @@ scene.onBeforeRenderObservable.add(() => {
 });
 
 window.MakyrenTraffic = {
-  version: '035',
+  version: '036',
   collision: collisionState,
   vehicles: traffic,
   pedestrians,
