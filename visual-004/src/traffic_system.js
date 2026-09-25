@@ -63,6 +63,7 @@ for (const side of [-1, 1]) {
 
 const setSignal = phase => {
   signalState.phase = phase;
+  signalState.remaining = signalCycle.find(item => item.phase === phase)?.duration ?? 0;
   for (const side of [-1, 1]) {
     const lamps = signalLights[side];
     lamps.red.material.emissiveColor = phase === 'red' ? new Color3(.8, .015, .01) : new Color3(.04, .002, .002);
@@ -237,7 +238,7 @@ scene.onBeforeRenderObservable.add(() => {
 });
 
 window.MakyrenTraffic = {
-  version: '032',
+  version: '033',
   collision: collisionState,
   vehicles: traffic,
   pedestrians,
