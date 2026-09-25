@@ -24,7 +24,7 @@ const playerVehicle = scene.getMeshByName('vehicle');
 const playerRoot = scene.getTransformNodeByName('player_root');
 const collisionState = { active: false, lastImpact: 0, impacts: 0 };
 
-const signalState = { phase: 'green', elapsed: 0 };
+const signalState = { phase: 'green', elapsed: 0, remaining: 7 };
 const signalCycle = [
   { phase: 'green', duration: 7 },
   { phase: 'yellow', duration: 2 },
@@ -235,7 +235,7 @@ scene.onBeforeRenderObservable.add(() => {
 });
 
 window.MakyrenTraffic = {
-  version: '030',
+  version: '031',
   collision: collisionState,
   vehicles: traffic,
   pedestrians,
