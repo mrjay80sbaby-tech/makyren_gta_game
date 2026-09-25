@@ -210,6 +210,8 @@ scene.onBeforeRenderObservable.add(() => {
         playerRoot.position.z += (dz / len) * .07;
         collisionState.active = true;
         collisionState.lastImpact = performance.now();
+        collisionState.impacts++;
+        collisionState.lastType = 'pedestrian';
       }
     }
     for (const vehicle of traffic) {
@@ -222,6 +224,7 @@ scene.onBeforeRenderObservable.add(() => {
         playerRoot.position.z += (dz / len) * .08;
         collisionState.active = true;
         collisionState.lastImpact = performance.now();
+        collisionState.impacts++;
         collisionState.lastType = 'vehicle';
       }
     }
@@ -248,7 +251,7 @@ scene.onBeforeRenderObservable.add(() => {
 });
 
 window.MakyrenTraffic = {
-  version: '039',
+  version: '040',
   collision: collisionState,
   vehicles: traffic,
   pedestrians,
