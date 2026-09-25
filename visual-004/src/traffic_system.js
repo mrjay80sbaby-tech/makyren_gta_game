@@ -243,6 +243,9 @@ window.MakyrenTraffic = {
   get districtCounts() {
     return traffic.reduce((counts, vehicle) => { const district = vehicle.metadata?.district || districtForZ(vehicle.position.z); counts[district] = (counts[district] || 0) + 1; return counts; }, {});
   },
+  get pedestrianDistrictCounts() {
+    return pedestrians.reduce((counts, pedestrian) => { const district = pedestrian.metadata?.district || districtForZ(pedestrian.position.z); counts[district] = (counts[district] || 0) + 1; return counts; }, {});
+  },
   get nearestVehicleDistance() {
     if (!playerVehicle) return Infinity;
     return traffic.reduce((nearest, vehicle) => Math.min(nearest, Vector3.Distance(vehicle.position, playerVehicle.position)), Infinity);
