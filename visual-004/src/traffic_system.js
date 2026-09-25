@@ -97,7 +97,7 @@ for (let i = 0; i < pedestrianCount; i++) {
   root.position.set(side * 10.25, 0, -28 + i * 18);
   const district = districtForZ(-28 + i * 18);
   const profile = districtProfile[district];
-  root.metadata = { pedestrian: true, speed: (.75 + i * .08) * profile.pedestrian, direction: i % 2 === 0 ? 1 : -1, phase: i * 1.7, district };
+  root.metadata = { pedestrian: true, baseSpeed: .75 + i * .08, speed: (.75 + i * .08) * profile.pedestrian, direction: i % 2 === 0 ? 1 : -1, phase: i * 1.7, district };
   pedestrians.push(root);
 }
 
@@ -164,6 +164,12 @@ scene.onBeforeRenderObservable.add(() => {
 
   for (const pedestrian of pedestrians) {
     const data = pedestrian.metadata;
+    const pedestrianDistrict = districtForZ(pedestrian.position.z);
+    const pedestrianProfile = districtProfile[pedestrianDistrict];
+    const baseSpeed = data.baseSpeed ?? data.speed;
+    data.baseSpeed = baseSpeed;
+    data.district = pedestrianDistrict;
+    data.speed = baseSpeed * pedestrianProfile.pedestrian;
     pedestrian.position.z += data.direction * data.speed * dt;
     if (pedestrian.position.z > 34) pedestrian.position.z = -34;
     if (pedestrian.position.z < -34) pedestrian.position.z = 34;
