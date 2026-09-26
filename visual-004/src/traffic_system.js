@@ -124,7 +124,9 @@ const animationHooks = {
     };
   },
   update(entity, dt) {
-    for (const hook of entity.metadata?.animationHooks || []) hook(dt, entity);
+    const hooks = entity.metadata?.animationHooks;
+    if (!hooks) return;
+    for (const hook of hooks) hook(dt, entity);
   },
 };
 window.MakyrenAnimationHooks = animationHooks;
