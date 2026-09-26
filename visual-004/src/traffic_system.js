@@ -288,6 +288,6 @@ window.MakyrenTraffic = {
     return pedestrians.reduce((nearest, pedestrian) => Math.min(nearest, Vector3.Distance(pedestrian.position, playerRoot.position)), Infinity);
   },
   get nearestTrafficDistance() {
-    return playerVehicle?.isEnabled() ? this.nearestVehicleDistance : this.nearestPedestrianDistance;
+    return playerRoot?.isEnabled() ? this.nearestPedestrianDistance : this.nearestVehicleDistance;
   },
 };
