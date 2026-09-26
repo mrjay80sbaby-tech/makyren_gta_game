@@ -262,7 +262,7 @@ scene.onBeforeRenderObservable.add(() => {
       const dz = playerRoot.position.z - vehicle.position.z;
       const distanceSquared = dx * dx + dz * dz;
       if (distanceSquared < 1.5625) {
-        const len = Math.max(.001, Math.hypot(dx, dz));
+        const len = Math.max(.001, Math.sqrt(distanceSquared));
         playerRoot.position.x += (dx / len) * .08;
         playerRoot.position.z += (dz / len) * .08;
         collisionState.active = true;
