@@ -162,6 +162,8 @@ scene.onBeforeRenderObservable.add(() => {
   nearestPedestrianDistance = Infinity;
   const onFoot = playerRoot?.isEnabled();
   const driving = playerVehicle?.isEnabled();
+  const playerVehicleX = driving ? playerVehicle.position.x : 0;
+  const playerVehicleZ = driving ? playerVehicle.position.z : 0;
   for (const vehicle of traffic) {
     const laneDirection = vehicle.position.x < 0 ? 1 : -1;
     const district = districtForZ(vehicle.position.z);
@@ -177,13 +179,13 @@ scene.onBeforeRenderObservable.add(() => {
     metadata.districtLabel = profile.label;
     metadata.targetSpeed = targetSpeed;
     if (!driving) continue;
-    const dxToPlayer = vehicle.position.x - playerVehicle.position.x;
-    const dzToPlayer = vehicle.position.z - playerVehicle.position.z;
+    const dxToPlayer = vehicle.position.x - playerVehicleX;
+    const dzToPlayer = vehicle.position.z - playerVehicleZ;
     const distanceSquaredToPlayer = dxToPlayer * dxToPlayer + dzToPlayer * dzToPlayer;
     if (distanceSquaredToPlayer < nearestVehicleDistanceSquared) nearestVehicleDistanceSquared = distanceSquaredToPlayer;
     if (distanceSquaredToPlayer < 14.44) {
       const distanceToPlayer = Math.sqrt(distanceSquaredToPlayer);
-      const away = vehicle.position.x >= playerVehicle.position.x ? 1 : -1;
+      const away = vehicle.position.x >= playerVehicleX ? 1 : -1;
       const strength = Math.max(.015, (3.8 - distanceToPlayer) * .035);
       vehicle.position.x += away * strength;
       if (distanceToPlayer < 2.35) vehicle.position.z -= laneDirection * strength * 1.5;
