@@ -63,14 +63,22 @@ for (const side of [-1, 1]) {
   }
 }
 
+const signalEmissive = {
+  redOn: new Color3(.8, .015, .01),
+  redOff: new Color3(.04, .002, .002),
+  yellowOn: new Color3(.95, .55, .02),
+  yellowOff: new Color3(.05, .025, .002),
+  greenOn: new Color3(.02, .8, .08),
+  greenOff: new Color3(.002, .05, .01),
+};
 const setSignal = phase => {
   signalState.phase = phase;
   signalState.remaining = signalCycle[signalIndex]?.duration ?? 0;
   for (const side of [-1, 1]) {
     const lamps = signalLights[side];
-    lamps.red.material.emissiveColor = phase === 'red' ? new Color3(.8, .015, .01) : new Color3(.04, .002, .002);
-    lamps.yellow.material.emissiveColor = phase === 'yellow' ? new Color3(.95, .55, .02) : new Color3(.05, .025, .002);
-    lamps.green.material.emissiveColor = phase === 'green' ? new Color3(.02, .8, .08) : new Color3(.002, .05, .01);
+    lamps.red.material.emissiveColor = phase === 'red' ? signalEmissive.redOn : signalEmissive.redOff;
+    lamps.yellow.material.emissiveColor = phase === 'yellow' ? signalEmissive.yellowOn : signalEmissive.yellowOff;
+    lamps.green.material.emissiveColor = phase === 'green' ? signalEmissive.greenOn : signalEmissive.greenOff;
   }
 };
 setSignal('green');
