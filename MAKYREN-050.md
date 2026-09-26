@@ -1,16 +1,18 @@
-# MAKYREN-050 — Connect District Traffic Speed to Movement
+# MAKYREN-050 — On-Foot Traffic Proximity Accuracy
 
 ## Scope
-Complete the existing Visual-004 district traffic speed handoff so the speed calculated by the traffic system is actually consumed by the ambient traffic movement loop.
+Align the Visual-004 traffic proximity HUD distance source with the active player mode.
 
 ## Implemented
-- Updated `visual-004/src/main.js` so each ambient traffic entry synchronizes its movement speed from the live mesh `speed` value when available.
-- The district-adjusted speed assigned by `traffic_system.js` now reaches the loop that advances traffic vehicles along the road.
-- Existing fallback behavior remains intact when a live mesh speed is unavailable.
-- No changes to traffic lanes, signals, collisions, missions, garage systems, or controls.
+- On foot, `nearestTrafficDistance` now uses the nearest pedestrian relative to `playerRoot`.
+- In vehicle mode, it continues using the nearest ambient vehicle relative to the player vehicle.
+- The HUD now matches the same active-mode state used by the proximity interactions.
+
+## Implementation
+- Commit: `0b2b273b35630db8fc30d1fc0406c1f2ad082591`
 
 ## Verification
-Repository inspection identified that MAKYREN-048 assigned the district-adjusted speed to the mesh while the movement loop still consumed the separate ambient-traffic object speed. This ticket closes that handoff gap. No local/runtime build was executed, so no successful build or runtime verification is claimed.
+Production source was inspected and the correction was committed. No local/runtime build was executed.
 
 ## Next
 MAKYREN-051 — inspect the current Visual-004 production state and execute the next smallest scoped correction.
