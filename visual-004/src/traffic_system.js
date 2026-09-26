@@ -24,6 +24,8 @@ const trafficFallbackBaseSpeeds = new Map(traffic.map((vehicle, index) => [vehic
 const playerVehicle = scene.getMeshByName('vehicle');
 const playerRoot = scene.getTransformNodeByName('player_root');
 const collisionState = { active: false, lastImpact: 0, impacts: 0, lastType: null };
+const trafficCollisionHalfWidth = 1.65;
+const trafficCollisionHalfDepth = 2.65;
 
 let signalIndex = 0;
 const signalState = { phase: 'green', elapsed: 0, remaining: 7 };
@@ -231,7 +233,7 @@ scene.onBeforeRenderObservable.add(() => {
     for (const vehicle of traffic) {
       const dx = vehicle.position.x - playerX;
       const dz = vehicle.position.z - playerZ;
-      if (Math.abs(dx) < 1.65 && Math.abs(dz) < 2.65) {
+      if (Math.abs(dx) < trafficCollisionHalfWidth && Math.abs(dz) < trafficCollisionHalfDepth) {
         const push = dx >= 0 ? .12 : -.12;
         vehicle.position.x += push;
         playerVehicle.position.x -= push * .45;
