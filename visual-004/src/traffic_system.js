@@ -236,10 +236,10 @@ scene.onBeforeRenderObservable.add(() => {
       }
     }
     for (const vehicle of traffic) {
-      const distance = Vector3.Distance(vehicle.position, playerRoot.position);
-      if (distance < 1.25) {
-        const dx = playerRoot.position.x - vehicle.position.x;
-        const dz = playerRoot.position.z - vehicle.position.z;
+      const dx = playerRoot.position.x - vehicle.position.x;
+      const dz = playerRoot.position.z - vehicle.position.z;
+      const distanceSquared = dx * dx + dz * dz;
+      if (distanceSquared < 1.5625) {
         const len = Math.max(.001, Math.hypot(dx, dz));
         playerRoot.position.x += (dx / len) * .08;
         playerRoot.position.z += (dz / len) * .08;
