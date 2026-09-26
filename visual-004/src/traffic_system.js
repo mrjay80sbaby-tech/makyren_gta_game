@@ -155,7 +155,7 @@ scene.onBeforeRenderObservable.add(() => {
     setSignal(signalCycle[signalIndex].phase);
   }
 
-  nearestVehicleDistance = Infinity;
+  let nearestVehicleDistanceSquared = Infinity;
   nearestPedestrianDistance = Infinity;
   const onFoot = playerRoot?.isEnabled();
   const driving = playerVehicle?.isEnabled();
@@ -176,9 +176,7 @@ scene.onBeforeRenderObservable.add(() => {
     const dxToPlayer = driving ? vehicle.position.x - playerVehicle.position.x : 0;
     const dzToPlayer = driving ? vehicle.position.z - playerVehicle.position.z : 0;
     const distanceSquaredToPlayer = driving ? dxToPlayer * dxToPlayer + dzToPlayer * dzToPlayer : Infinity;
-    if (distanceSquaredToPlayer < nearestVehicleDistance * nearestVehicleDistance) {
-      nearestVehicleDistance = Math.sqrt(distanceSquaredToPlayer);
-    }
+    if (distanceSquaredToPlayer < nearestVehicleDistanceSquared) nearestVehicleDistanceSquared = distanceSquaredToPlayer;
     if (driving && distanceSquaredToPlayer < 14.44) {
       const distanceToPlayer = Math.sqrt(distanceSquaredToPlayer);
       const away = vehicle.position.x >= playerVehicle.position.x ? 1 : -1;
@@ -197,6 +195,8 @@ scene.onBeforeRenderObservable.add(() => {
       else vehicle.position.z = Math.max(vehicle.position.z, stopZ);
     }
   }
+
+  nearestVehicleDistance = Number.isFinite(nearestVehicleDistanceSquared) ? Math.sqrt(nearestVehicleDistanceSquared) : Infinity;
 
   let nearestPedestrianDistanceSquared = Infinity;
   for (const pedestrian of pedestrians) {
