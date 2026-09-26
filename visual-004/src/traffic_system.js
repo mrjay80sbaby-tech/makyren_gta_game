@@ -141,7 +141,7 @@ scene.onBeforeRenderObservable.add(() => {
     signalState.elapsed = 0;
     signalIndex = (signalIndex + 1) % signalCycle.length;
     setSignal(signalCycle[signalIndex].phase);
-    const nextPhase = signalCycle[nextIndex];
+    const nextPhase = signalCycle[signalIndex];
     signalState.remaining = nextPhase ? nextPhase.duration : 0;
   }
 
