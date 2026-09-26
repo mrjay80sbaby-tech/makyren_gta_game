@@ -25,6 +25,7 @@ const playerVehicle = scene.getMeshByName('vehicle');
 const playerRoot = scene.getTransformNodeByName('player_root');
 const collisionState = { active: false, lastImpact: 0, impacts: 0, lastType: null };
 
+let signalIndex = 0;
 const signalState = { phase: 'green', elapsed: 0, remaining: 7 };
 const signalCycle = [
   { phase: 'green', duration: 7 },
@@ -138,8 +139,8 @@ scene.onBeforeRenderObservable.add(() => {
   signalState.remaining = current ? Math.max(0, current.duration - signalState.elapsed) : 0;
   if (current && signalState.elapsed >= current.duration) {
     signalState.elapsed = 0;
-    const nextIndex = signalCycle.indexOf(current) + 1 >= signalCycle.length ? 0 : signalCycle.indexOf(current) + 1;
-    setSignal(signalCycle[nextIndex].phase);
+    signalIndex = (signalIndex + 1) % signalCycle.length;
+    setSignal(signalCycle[signalIndex].phase);
     const nextPhase = signalCycle[nextIndex];
     signalState.remaining = nextPhase ? nextPhase.duration : 0;
   }
