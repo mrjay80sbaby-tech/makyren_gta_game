@@ -188,14 +188,17 @@ scene.onBeforeRenderObservable.add(() => {
     }
   }
 
+  let nearestPedestrianDistanceSquared = Infinity;
   for (const pedestrian of pedestrians) {
     const data = pedestrian.metadata;
     const pedestrianDistrict = districtForZ(pedestrian.position.z);
     const pedestrianProfile = districtProfile[pedestrianDistrict];
     const baseSpeed = data.baseSpeed ?? data.speed;
     if (onFoot) {
-      const distanceToPlayer = Vector3.Distance(pedestrian.position, playerRoot.position);
-      if (distanceToPlayer < nearestPedestrianDistance) nearestPedestrianDistance = distanceToPlayer;
+      const dxToPlayer = pedestrian.position.x - playerRoot.position.x;
+      const dzToPlayer = pedestrian.position.z - playerRoot.position.z;
+      const distanceSquaredToPlayer = dxToPlayer * dxToPlayer + dzToPlayer * dzToPlayer;
+      if (distanceSquaredToPlayer < nearestPedestrianDistanceSquared) nearestPedestrianDistanceSquared = distanceSquaredToPlayer;
     }
     data.baseSpeed = baseSpeed;
     data.district = pedestrianDistrict;
@@ -209,6 +212,7 @@ scene.onBeforeRenderObservable.add(() => {
     pedestrian.position.y = Math.sin(elapsed * 4 + data.phase) * .025;
     animationHooks.update(pedestrian, dt);
   }
+  if (Number.isFinite(nearestPedestrianDistanceSquared)) nearestPedestrianDistance = Math.sqrt(nearestPedestrianDistanceSquared);
 
   if (driving) {
     const playerX = playerVehicle.position.x;
