@@ -11,6 +11,7 @@ const waitForScene = () => new Promise((resolve, reject) => {
 });
 
 const scene = await waitForScene();
+const engine = scene.getEngine();
 const quality = window.MakyrenVisualQuality?.preset || 'high';
 const mobile = quality === 'mobile';
 const districtForZ = z => Math.abs(z) < 10 ? 'downtown' : (z < 0 ? 'southside' : 'northside');
@@ -146,7 +147,7 @@ let nearestVehicleDistance = Infinity;
 let nearestPedestrianDistance = Infinity;
 scene.onBeforeRenderObservable.add(() => {
   const now = performance.now();
-  const dt = Math.min(.1, scene.getEngine().getDeltaTime() / 1000);
+  const dt = Math.min(.1, engine.getDeltaTime() / 1000);
   elapsed += dt;
   signalState.elapsed += dt;
   const current = signalCycle[signalIndex];
