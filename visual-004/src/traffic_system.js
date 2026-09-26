@@ -162,6 +162,8 @@ scene.onBeforeRenderObservable.add(() => {
   nearestPedestrianDistance = Infinity;
   const onFoot = playerRoot?.isEnabled();
   const driving = playerVehicle?.isEnabled();
+  const playerRootX = onFoot ? playerRoot.position.x : 0;
+  const playerRootZ = onFoot ? playerRoot.position.z : 0;
   const playerVehicleX = driving ? playerVehicle.position.x : 0;
   const playerVehicleZ = driving ? playerVehicle.position.z : 0;
   for (const vehicle of traffic) {
@@ -211,8 +213,8 @@ scene.onBeforeRenderObservable.add(() => {
     const pedestrianProfile = districtProfile[pedestrianDistrict];
     const baseSpeed = data.baseSpeed ?? data.speed;
     if (onFoot) {
-      const dxToPlayer = pedestrian.position.x - playerRoot.position.x;
-      const dzToPlayer = pedestrian.position.z - playerRoot.position.z;
+      const dxToPlayer = pedestrian.position.x - playerRootX;
+      const dzToPlayer = pedestrian.position.z - playerRootZ;
       const distanceSquaredToPlayer = dxToPlayer * dxToPlayer + dzToPlayer * dzToPlayer;
       if (distanceSquaredToPlayer < nearestPedestrianDistanceSquared) nearestPedestrianDistanceSquared = distanceSquaredToPlayer;
     }
@@ -248,8 +250,8 @@ scene.onBeforeRenderObservable.add(() => {
     }
   }
   if (onFoot) {
-    const playerX = playerRoot.position.x;
-    const playerZ = playerRoot.position.z;
+    const playerX = playerRootX;
+    const playerZ = playerRootZ;
     for (const pedestrian of pedestrians) {
       const dx = playerX - pedestrian.position.x;
       const dz = playerZ - pedestrian.position.z;
