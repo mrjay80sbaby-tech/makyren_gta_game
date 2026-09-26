@@ -205,10 +205,12 @@ scene.onBeforeRenderObservable.add(() => {
     animationHooks.update(pedestrian, dt);
   }
 
-  if (playerVehicle) {
+  if (driving) {
+    const playerX = playerVehicle.position.x;
+    const playerZ = playerVehicle.position.z;
     for (const vehicle of traffic) {
-      const dx = vehicle.position.x - playerVehicle.position.x;
-      const dz = vehicle.position.z - playerVehicle.position.z;
+      const dx = vehicle.position.x - playerX;
+      const dz = vehicle.position.z - playerZ;
       if (Math.abs(dx) < 1.65 && Math.abs(dz) < 2.65) {
         const push = dx >= 0 ? .12 : -.12;
         vehicle.position.x += push;
