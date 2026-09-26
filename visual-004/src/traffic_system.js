@@ -223,11 +223,14 @@ scene.onBeforeRenderObservable.add(() => {
     }
   }
   if (onFoot) {
+    const playerX = playerRoot.position.x;
+    const playerZ = playerRoot.position.z;
     for (const pedestrian of pedestrians) {
-      const dx = playerRoot.position.x - pedestrian.position.x;
-      const dz = playerRoot.position.z - pedestrian.position.z;
-      const distance = Math.hypot(dx, dz);
-      if (distance < 1.05) {
+      const dx = playerX - pedestrian.position.x;
+      const dz = playerZ - pedestrian.position.z;
+      const distanceSquared = dx * dx + dz * dz;
+      if (distanceSquared < 1.1025) {
+        const distance = Math.sqrt(distanceSquared);
         const len = Math.max(.001, distance);
         playerRoot.position.x += (dx / len) * .07;
         playerRoot.position.z += (dz / len) * .07;
