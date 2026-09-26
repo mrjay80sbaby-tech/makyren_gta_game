@@ -173,11 +173,12 @@ scene.onBeforeRenderObservable.add(() => {
     metadata.district = district;
     metadata.districtLabel = profile.label;
     metadata.targetSpeed = targetSpeed;
-    const dxToPlayer = driving ? vehicle.position.x - playerVehicle.position.x : 0;
-    const dzToPlayer = driving ? vehicle.position.z - playerVehicle.position.z : 0;
-    const distanceSquaredToPlayer = driving ? dxToPlayer * dxToPlayer + dzToPlayer * dzToPlayer : Infinity;
+    if (!driving) continue;
+    const dxToPlayer = vehicle.position.x - playerVehicle.position.x;
+    const dzToPlayer = vehicle.position.z - playerVehicle.position.z;
+    const distanceSquaredToPlayer = dxToPlayer * dxToPlayer + dzToPlayer * dzToPlayer;
     if (distanceSquaredToPlayer < nearestVehicleDistanceSquared) nearestVehicleDistanceSquared = distanceSquaredToPlayer;
-    if (driving && distanceSquaredToPlayer < 14.44) {
+    if (distanceSquaredToPlayer < 14.44) {
       const distanceToPlayer = Math.sqrt(distanceSquaredToPlayer);
       const away = vehicle.position.x >= playerVehicle.position.x ? 1 : -1;
       const strength = Math.max(.015, (3.8 - distanceToPlayer) * .035);
