@@ -147,6 +147,7 @@ scene.onBeforeRenderObservable.add(() => {
 
   nearestVehicleDistance = Infinity;
   nearestPedestrianDistance = Infinity;
+  const onFoot = playerRoot?.isEnabled();
   for (const vehicle of traffic) {
     const laneDirection = vehicle.position.x < 0 ? 1 : -1;
     const district = districtForZ(vehicle.position.z);
@@ -186,7 +187,7 @@ scene.onBeforeRenderObservable.add(() => {
     const pedestrianDistrict = districtForZ(pedestrian.position.z);
     const pedestrianProfile = districtProfile[pedestrianDistrict];
     const baseSpeed = data.baseSpeed ?? data.speed;
-    if (playerRoot?.isEnabled()) {
+    if (onFoot) {
       const distanceToPlayer = Vector3.Distance(pedestrian.position, playerRoot.position);
       if (distanceToPlayer < nearestPedestrianDistance) nearestPedestrianDistance = distanceToPlayer;
     }
@@ -218,7 +219,7 @@ scene.onBeforeRenderObservable.add(() => {
       }
     }
   }
-  if (playerRoot?.isEnabled()) {
+  if (onFoot) {
     for (const pedestrian of pedestrians) {
       const dx = playerRoot.position.x - pedestrian.position.x;
       const dz = playerRoot.position.z - pedestrian.position.z;
@@ -252,7 +253,6 @@ scene.onBeforeRenderObservable.add(() => {
     collisionState.active = false;
     collisionState.lastType = null;
   }
-  const onFoot = playerRoot?.isEnabled();
   const nearestTraffic = window.MakyrenTraffic.nearestTrafficDistance;
   if (nearestTraffic < 5) {
     const proximityText = onFoot
