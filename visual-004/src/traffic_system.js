@@ -151,7 +151,13 @@ scene.onBeforeRenderObservable.add(() => {
     const baseSpeed = vehicle.metadata?.baseSpeed ?? trafficFallbackBaseSpeeds.get(vehicle) ?? 2.2;
     const targetSpeed = baseSpeed * profile.speed;
     vehicle.speed = targetSpeed;
-    vehicle.metadata = { ...(vehicle.metadata || {}), traffic: true, laneDirection, signalPhase: signalState.phase, district, districtLabel: profile.label, targetSpeed };
+    const metadata = vehicle.metadata || (vehicle.metadata = {});
+    metadata.traffic = true;
+    metadata.laneDirection = laneDirection;
+    metadata.signalPhase = signalState.phase;
+    metadata.district = district;
+    metadata.districtLabel = profile.label;
+    metadata.targetSpeed = targetSpeed;
     const distanceToPlayer = playerVehicle ? Vector3.Distance(vehicle.position, playerVehicle.position) : Infinity;
     if (playerVehicle && distanceToPlayer < 3.8) {
       const away = vehicle.position.x >= playerVehicle.position.x ? 1 : -1;
