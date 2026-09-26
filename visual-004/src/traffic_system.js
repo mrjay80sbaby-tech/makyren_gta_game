@@ -130,6 +130,8 @@ document.body.appendChild(proximityHud);
 let elapsed = 0;
 let proximityVisible = false;
 let lastProximityText = '';
+let nearestVehicleDistance = Infinity;
+let nearestPedestrianDistance = Infinity;
 scene.onBeforeRenderObservable.add(() => {
   const now = performance.now();
   const dt = Math.min(.1, scene.getEngine().getDeltaTime() / 1000);
@@ -143,6 +145,8 @@ scene.onBeforeRenderObservable.add(() => {
     setSignal(signalCycle[signalIndex].phase);
   }
 
+  nearestVehicleDistance = Infinity;
+  nearestPedestrianDistance = Infinity;
   for (const vehicle of traffic) {
     const laneDirection = vehicle.position.x < 0 ? 1 : -1;
     const district = districtForZ(vehicle.position.z);
@@ -158,6 +162,7 @@ scene.onBeforeRenderObservable.add(() => {
     metadata.districtLabel = profile.label;
     metadata.targetSpeed = targetSpeed;
     const distanceToPlayer = playerVehicle ? Vector3.Distance(vehicle.position, playerVehicle.position) : Infinity;
+    if (distanceToPlayer < nearestVehicleDistance) nearestVehicleDistance = distanceToPlayer;
     if (playerVehicle && distanceToPlayer < 3.8) {
       const away = vehicle.position.x >= playerVehicle.position.x ? 1 : -1;
       const strength = Math.max(.015, (3.8 - distanceToPlayer) * .035);
@@ -181,6 +186,10 @@ scene.onBeforeRenderObservable.add(() => {
     const pedestrianDistrict = districtForZ(pedestrian.position.z);
     const pedestrianProfile = districtProfile[pedestrianDistrict];
     const baseSpeed = data.baseSpeed ?? data.speed;
+    if (playerRoot?.isEnabled()) {
+      const distanceToPlayer = Vector3.Distance(pedestrian.position, playerRoot.position);
+      if (distanceToPlayer < nearestPedestrianDistance) nearestPedestrianDistance = distanceToPlayer;
+    }
     data.baseSpeed = baseSpeed;
     data.district = pedestrianDistrict;
     data.districtLabel = pedestrianProfile.label;
@@ -278,12 +287,10 @@ window.MakyrenTraffic = {
     return pedestrians.reduce((counts, pedestrian) => { const district = pedestrian.metadata?.district || districtForZ(pedestrian.position.z); counts[district] = (counts[district] || 0) + 1; return counts; }, {});
   },
   get nearestVehicleDistance() {
-    if (!playerVehicle) return Infinity;
-    return traffic.reduce((nearest, vehicle) => Math.min(nearest, Vector3.Distance(vehicle.position, playerVehicle.position)), Infinity);
+    return nearestVehicleDistance;
   },
   get nearestPedestrianDistance() {
-    if (!playerRoot?.isEnabled()) return Infinity;
-    return pedestrians.reduce((nearest, pedestrian) => Math.min(nearest, Vector3.Distance(pedestrian.position, playerRoot.position)), Infinity);
+    return nearestPedestrianDistance;
   },
   get nearestTrafficDistance() {
     return playerRoot?.isEnabled() ? this.nearestPedestrianDistance : this.nearestVehicleDistance;
