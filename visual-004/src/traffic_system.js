@@ -20,6 +20,7 @@ const districtProfile = {
   northside: { speed: .9, pedestrian: 1.0, label: 'Northside' },
 };
 const traffic = scene.meshes.filter(mesh => mesh.name.startsWith('ambient_vehicle'));
+const trafficFallbackBaseSpeeds = new Map(traffic.map((vehicle, index) => [vehicle, 2.2 + index * .45]));
 const playerVehicle = scene.getMeshByName('vehicle');
 const playerRoot = scene.getTransformNodeByName('player_root');
 const collisionState = { active: false, lastImpact: 0, impacts: 0, lastType: null };
@@ -147,7 +148,7 @@ scene.onBeforeRenderObservable.add(() => {
     const laneDirection = vehicle.position.x < 0 ? 1 : -1;
     const district = districtForZ(vehicle.position.z);
     const profile = districtProfile[district];
-    const baseSpeed = vehicle.metadata?.baseSpeed ?? (2.2 + traffic.indexOf(vehicle) * .45);
+    const baseSpeed = vehicle.metadata?.baseSpeed ?? trafficFallbackBaseSpeeds.get(vehicle) ?? 2.2;
     const targetSpeed = baseSpeed * profile.speed;
     vehicle.speed = targetSpeed;
     vehicle.metadata = { ...(vehicle.metadata || {}), traffic: true, laneDirection, signalPhase: signalState.phase, district, districtLabel: profile.label, targetSpeed };
