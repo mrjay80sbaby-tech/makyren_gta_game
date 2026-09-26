@@ -134,7 +134,7 @@ scene.onBeforeRenderObservable.add(() => {
   const dt = Math.min(.1, scene.getEngine().getDeltaTime() / 1000);
   elapsed += dt;
   signalState.elapsed += dt;
-  const current = signalCycle.find(item => item.phase === signalState.phase);
+  const current = signalCycle[signalState.phase === 'green' ? 0 : signalState.phase === 'yellow' ? 1 : 2];
   signalState.remaining = current ? Math.max(0, current.duration - signalState.elapsed) : 0;
   if (current && signalState.elapsed >= current.duration) {
     signalState.elapsed = 0;
