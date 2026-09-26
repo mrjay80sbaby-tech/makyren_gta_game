@@ -151,6 +151,7 @@ scene.onBeforeRenderObservable.add(() => {
   elapsed += dt;
   signalState.elapsed += dt;
   const current = signalCycle[signalIndex];
+  const signalPhase = signalState.phase;
   signalState.remaining = current ? Math.max(0, current.duration - signalState.elapsed) : 0;
   if (current && signalState.elapsed >= current.duration) {
     signalState.elapsed = 0;
@@ -176,7 +177,7 @@ scene.onBeforeRenderObservable.add(() => {
     const metadata = vehicle.metadata || (vehicle.metadata = {});
     metadata.traffic = true;
     metadata.laneDirection = laneDirection;
-    metadata.signalPhase = signalState.phase;
+    metadata.signalPhase = signalPhase;
     metadata.district = district;
     metadata.districtLabel = profile.label;
     metadata.targetSpeed = targetSpeed;
@@ -195,7 +196,7 @@ scene.onBeforeRenderObservable.add(() => {
     const approachingCrosswalk = laneDirection > 0
       ? vehicle.position.z < -1.5 && vehicle.position.z > -8
       : vehicle.position.z > -1.5 && vehicle.position.z < 5;
-    if (signalState.phase === 'red' && approachingCrosswalk) {
+    if (signalPhase === 'red' && approachingCrosswalk) {
       const stopZ = laneDirection > 0 ? -3.15 : .15;
       vehicle.speed = 0;
       vehicle.metadata.targetSpeed = 0;
