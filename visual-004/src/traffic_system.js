@@ -254,6 +254,8 @@ scene.onBeforeRenderObservable.add(() => {
   if (onFoot) {
     const playerX = playerRootX;
     const playerZ = playerRootZ;
+    let pedestrianPlayerX = playerX;
+    let pedestrianPlayerZ = playerZ;
     for (const pedestrian of pedestrians) {
       const dx = playerX - pedestrian.position.x;
       const dz = playerZ - pedestrian.position.z;
@@ -261,8 +263,10 @@ scene.onBeforeRenderObservable.add(() => {
       if (distanceSquared < 1.1025) {
         const distance = Math.sqrt(distanceSquared);
         const len = Math.max(.001, distance);
-        playerRoot.position.x += (dx / len) * .07;
-        playerRoot.position.z += (dz / len) * .07;
+        pedestrianPlayerX += (dx / len) * .07;
+        pedestrianPlayerZ += (dz / len) * .07;
+        playerRoot.position.x = pedestrianPlayerX;
+        playerRoot.position.z = pedestrianPlayerZ;
         collisionState.active = true;
         collisionState.lastImpact = now;
         collisionState.impacts++;
