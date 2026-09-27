@@ -235,8 +235,8 @@ scene.onBeforeRenderObservable.add(() => {
   if (Number.isFinite(nearestPedestrianDistanceSquared)) nearestPedestrianDistance = Math.sqrt(nearestPedestrianDistanceSquared);
 
   if (driving) {
-    const playerX = playerVehicle.position.x;
-    const playerZ = playerVehicle.position.z;
+    const playerX = playerVehicleX;
+    const playerZ = playerVehicleZ;
     for (const vehicle of traffic) {
       const dx = vehicle.position.x - playerX;
       const dz = vehicle.position.z - playerZ;
