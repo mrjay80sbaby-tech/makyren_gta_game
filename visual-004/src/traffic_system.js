@@ -151,13 +151,14 @@ scene.onBeforeRenderObservable.add(() => {
   elapsed += dt;
   signalState.elapsed += dt;
   const current = signalCycle[signalIndex];
-  const signalPhase = signalState.phase;
   signalState.remaining = current ? Math.max(0, current.duration - signalState.elapsed) : 0;
   if (current && signalState.elapsed >= current.duration) {
     signalState.elapsed = 0;
     signalIndex = (signalIndex + 1) % signalCycle.length;
     setSignal(signalCycle[signalIndex].phase);
   }
+
+  const signalPhase = signalState.phase;
 
   let nearestVehicleDistanceSquared = Infinity;
   nearestPedestrianDistance = Infinity;
