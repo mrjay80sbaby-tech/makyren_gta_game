@@ -273,8 +273,8 @@ scene.onBeforeRenderObservable.add(() => {
         collisionState.lastType = 'pedestrian';
       }
     }
-    let collisionPlayerX = playerRootX;
-    let collisionPlayerZ = playerRootZ;
+    let collisionPlayerX = pedestrianPlayerX;
+    let collisionPlayerZ = pedestrianPlayerZ;
     for (const vehicle of traffic) {
       const dx = collisionPlayerX - vehicle.position.x;
       const dz = collisionPlayerZ - vehicle.position.z;
