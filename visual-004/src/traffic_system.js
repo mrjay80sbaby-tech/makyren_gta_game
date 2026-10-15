@@ -132,7 +132,8 @@ for (let i = 0; i < pedestrianCount; i++) {
   root.position.set(side * 10.25, 0, initialZ);
   const district = districtForZ(initialZ);
   const profile = districtProfile[district];
-  root.metadata = { pedestrian: true, baseSpeed: .75 + i * .08, speed: (.75 + i * .08) * profile.pedestrian, direction: i % 2 === 0 ? 1 : -1, phase: i * 1.7, district };
+  const baseSpeed = .75 + i * .08;
+  root.metadata = { pedestrian: true, baseSpeed, speed: baseSpeed * profile.pedestrian, direction: i % 2 === 0 ? 1 : -1, phase: i * 1.7, district };
   pedestrians.push(root);
 }
 
