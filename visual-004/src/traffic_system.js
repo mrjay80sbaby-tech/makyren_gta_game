@@ -27,6 +27,12 @@ const playerRoot = scene.getTransformNodeByName('player_root');
 const collisionState = { active: false, lastImpact: 0, impacts: 0, lastType: null };
 const trafficCollisionHalfWidth = 1.65;
 const trafficCollisionHalfDepth = 2.65;
+const drivingProximityRadiusSquared = 14.44;
+const trafficProximityResponseDistance = 3.8;
+const trafficLateralPushMinimum = .015;
+const trafficLateralPushScale = .035;
+const trafficLongitudinalPushDistance = 2.35;
+const trafficLongitudinalPushScale = 1.5;
 const pedestrianCollisionRadiusSquared = 1.1025;
 const onFootVehicleCollisionRadiusSquared = 1.5625;
 
@@ -188,12 +194,12 @@ scene.onBeforeRenderObservable.add(() => {
     const dzToPlayer = vehicle.position.z - playerVehicleZ;
     const distanceSquaredToPlayer = dxToPlayer * dxToPlayer + dzToPlayer * dzToPlayer;
     if (distanceSquaredToPlayer < nearestVehicleDistanceSquared) nearestVehicleDistanceSquared = distanceSquaredToPlayer;
-    if (distanceSquaredToPlayer < 14.44) {
+    if (distanceSquaredToPlayer < drivingProximityRadiusSquared) {
       const distanceToPlayer = Math.sqrt(distanceSquaredToPlayer);
       const away = vehicle.position.x >= playerVehicleX ? 1 : -1;
-      const strength = Math.max(.015, (3.8 - distanceToPlayer) * .035);
+      const strength = Math.max(trafficLateralPushMinimum, (trafficProximityResponseDistance - distanceToPlayer) * trafficLateralPushScale);
       vehicle.position.x += away * strength;
-      if (distanceToPlayer < 2.35) vehicle.position.z -= laneDirection * strength * 1.5;
+      if (distanceToPlayer < trafficLongitudinalPushDistance) vehicle.position.z -= laneDirection * strength * trafficLongitudinalPushScale;
     }
     const approachingCrosswalk = laneDirection > 0
       ? vehicle.position.z < -1.5 && vehicle.position.z > -8
