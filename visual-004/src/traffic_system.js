@@ -210,17 +210,18 @@ scene.onBeforeRenderObservable.add(() => {
     if (metadata.district !== district) metadata.district = district;
     if (metadata.districtLabel !== profile.label) metadata.districtLabel = profile.label;
     if (metadata.targetSpeed !== targetSpeed) metadata.targetSpeed = targetSpeed;
-    if (!driving) continue;
-    const dxToPlayer = vehicle.position.x - playerVehicleX;
-    const dzToPlayer = vehicle.position.z - playerVehicleZ;
-    const distanceSquaredToPlayer = dxToPlayer * dxToPlayer + dzToPlayer * dzToPlayer;
-    if (distanceSquaredToPlayer < nearestVehicleDistanceSquared) nearestVehicleDistanceSquared = distanceSquaredToPlayer;
-    if (distanceSquaredToPlayer < drivingProximityRadiusSquared) {
-      const distanceToPlayer = Math.sqrt(distanceSquaredToPlayer);
-      const away = vehicle.position.x >= playerVehicleX ? 1 : -1;
-      const strength = Math.max(trafficLateralPushMinimum, (trafficProximityResponseDistance - distanceToPlayer) * trafficLateralPushScale);
-      vehicle.position.x += away * strength;
-      if (distanceToPlayer < trafficLongitudinalPushDistance) vehicle.position.z -= laneDirection * strength * trafficLongitudinalPushScale;
+    if (driving) {
+      const dxToPlayer = vehicle.position.x - playerVehicleX;
+      const dzToPlayer = vehicle.position.z - playerVehicleZ;
+      const distanceSquaredToPlayer = dxToPlayer * dxToPlayer + dzToPlayer * dzToPlayer;
+      if (distanceSquaredToPlayer < nearestVehicleDistanceSquared) nearestVehicleDistanceSquared = distanceSquaredToPlayer;
+      if (distanceSquaredToPlayer < drivingProximityRadiusSquared) {
+        const distanceToPlayer = Math.sqrt(distanceSquaredToPlayer);
+        const away = vehicle.position.x >= playerVehicleX ? 1 : -1;
+        const strength = Math.max(trafficLateralPushMinimum, (trafficProximityResponseDistance - distanceToPlayer) * trafficLateralPushScale);
+        vehicle.position.x += away * strength;
+        if (distanceToPlayer < trafficLongitudinalPushDistance) vehicle.position.z -= laneDirection * strength * trafficLongitudinalPushScale;
+      }
     }
     const approachingCrosswalk = laneDirection > 0
       ? vehicle.position.z < positiveLaneCrosswalkMaxZ && vehicle.position.z > positiveLaneCrosswalkMinZ
