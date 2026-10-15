@@ -33,6 +33,12 @@ const trafficLateralPushMinimum = .015;
 const trafficLateralPushScale = .035;
 const trafficLongitudinalPushDistance = 2.35;
 const trafficLongitudinalPushScale = 1.5;
+const positiveLaneCrosswalkMinZ = -8;
+const positiveLaneCrosswalkMaxZ = -1.5;
+const negativeLaneCrosswalkMinZ = -1.5;
+const negativeLaneCrosswalkMaxZ = 5;
+const positiveLaneStopZ = -3.15;
+const negativeLaneStopZ = .15;
 const pedestrianCollisionRadiusSquared = 1.1025;
 const onFootVehicleCollisionRadiusSquared = 1.5625;
 
@@ -202,10 +208,10 @@ scene.onBeforeRenderObservable.add(() => {
       if (distanceToPlayer < trafficLongitudinalPushDistance) vehicle.position.z -= laneDirection * strength * trafficLongitudinalPushScale;
     }
     const approachingCrosswalk = laneDirection > 0
-      ? vehicle.position.z < -1.5 && vehicle.position.z > -8
-      : vehicle.position.z > -1.5 && vehicle.position.z < 5;
+      ? vehicle.position.z < positiveLaneCrosswalkMaxZ && vehicle.position.z > positiveLaneCrosswalkMinZ
+      : vehicle.position.z > negativeLaneCrosswalkMinZ && vehicle.position.z < negativeLaneCrosswalkMaxZ;
     if (signalPhase === 'red' && approachingCrosswalk) {
-      const stopZ = laneDirection > 0 ? -3.15 : .15;
+      const stopZ = laneDirection > 0 ? positiveLaneStopZ : negativeLaneStopZ;
       vehicle.speed = 0;
       vehicle.metadata.targetSpeed = 0;
       if (laneDirection > 0) vehicle.position.z = Math.min(vehicle.position.z, stopZ);
