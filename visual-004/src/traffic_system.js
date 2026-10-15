@@ -257,8 +257,8 @@ scene.onBeforeRenderObservable.add(() => {
     let pedestrianPlayerX = playerX;
     let pedestrianPlayerZ = playerZ;
     for (const pedestrian of pedestrians) {
-      const dx = playerX - pedestrian.position.x;
-      const dz = playerZ - pedestrian.position.z;
+      const dx = pedestrianPlayerX - pedestrian.position.x;
+      const dz = pedestrianPlayerZ - pedestrian.position.z;
       const distanceSquared = dx * dx + dz * dz;
       if (distanceSquared < 1.1025) {
         const distance = Math.sqrt(distanceSquared);
