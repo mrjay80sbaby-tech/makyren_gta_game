@@ -22,6 +22,8 @@ const pedestrianStartZ = -28;
 const pedestrianSpacingZ = 18;
 const pedestrianLaneOffsetX = 10.25;
 const pedestrianBobPhaseSpacing = 1.7;
+const pedestrianBaseSpeedStart = .75;
+const pedestrianBaseSpeedStep = .08;
 const districtForZ = z => Math.abs(z) < districtBoundaryZ ? 'downtown' : (z < 0 ? 'southside' : 'northside');
 const districtProfile = {
   downtown: { speed: .78, pedestrian: 1.12, label: 'Downtown' },
@@ -134,7 +136,7 @@ for (let i = 0; i < pedestrianCount; i++) {
   root.position.set(side * pedestrianLaneOffsetX, 0, initialZ);
   const district = districtForZ(initialZ);
   const profile = districtProfile[district];
-  const baseSpeed = .75 + i * .08;
+  const baseSpeed = pedestrianBaseSpeedStart + i * pedestrianBaseSpeedStep;
   root.metadata = { pedestrian: true, baseSpeed, speed: baseSpeed * profile.pedestrian, direction: i % 2 === 0 ? 1 : -1, phase: i * pedestrianBobPhaseSpacing, district };
   pedestrians.push(root);
 }
