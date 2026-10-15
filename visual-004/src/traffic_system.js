@@ -18,6 +18,8 @@ const districtBoundaryZ = 10;
 const pedestrianWrapBoundaryZ = 34;
 const pedestrianBobFrequency = 4;
 const pedestrianBobAmplitude = .025;
+const pedestrianStartZ = -28;
+const pedestrianSpacingZ = 18;
 const districtForZ = z => Math.abs(z) < districtBoundaryZ ? 'downtown' : (z < 0 ? 'southside' : 'northside');
 const districtProfile = {
   downtown: { speed: .78, pedestrian: 1.12, label: 'Downtown' },
@@ -126,8 +128,9 @@ for (let i = 0; i < pedestrianCount; i++) {
   head.material = pedestrianSkinMat.clone(`pedestrian_skin_mat_${i}`);
   head.parent = root;
   const side = i % 2 === 0 ? -1 : 1;
-  root.position.set(side * 10.25, 0, -28 + i * 18);
-  const district = districtForZ(-28 + i * 18);
+  const initialZ = pedestrianStartZ + i * pedestrianSpacingZ;
+  root.position.set(side * 10.25, 0, initialZ);
+  const district = districtForZ(initialZ);
   const profile = districtProfile[district];
   root.metadata = { pedestrian: true, baseSpeed: .75 + i * .08, speed: (.75 + i * .08) * profile.pedestrian, direction: i % 2 === 0 ? 1 : -1, phase: i * 1.7, district };
   pedestrians.push(root);
