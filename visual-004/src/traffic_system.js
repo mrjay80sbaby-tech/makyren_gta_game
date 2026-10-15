@@ -161,7 +161,6 @@ scene.onBeforeRenderObservable.add(() => {
   const signalPhase = signalState.phase;
 
   let nearestVehicleDistanceSquared = Infinity;
-  nearestPedestrianDistance = Infinity;
   const onFoot = playerRoot?.isEnabled();
   const driving = playerVehicle?.isEnabled();
   const playerRootX = onFoot ? playerRoot.position.x : 0;
@@ -232,7 +231,7 @@ scene.onBeforeRenderObservable.add(() => {
     pedestrian.position.y = Math.sin(elapsed * 4 + data.phase) * .025;
     animationHooks.update(pedestrian, dt);
   }
-  if (Number.isFinite(nearestPedestrianDistanceSquared)) nearestPedestrianDistance = Math.sqrt(nearestPedestrianDistanceSquared);
+  nearestPedestrianDistance = Number.isFinite(nearestPedestrianDistanceSquared) ? Math.sqrt(nearestPedestrianDistanceSquared) : Infinity;
 
   if (driving) {
     let collisionVehiclePlayerX = playerVehicleX;
