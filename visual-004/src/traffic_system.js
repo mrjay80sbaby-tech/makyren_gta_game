@@ -51,6 +51,7 @@ const positiveLaneStopZ = -3.15;
 const negativeLaneStopZ = .15;
 const pedestrianCollisionRadiusSquared = 1.1025;
 const onFootVehicleCollisionRadiusSquared = 1.5625;
+const collisionActiveDurationMs = 350;
 
 let signalIndex = 0;
 const signalState = { phase: 'green', elapsed: 0, remaining: 7 };
@@ -323,7 +324,7 @@ scene.onBeforeRenderObservable.add(() => {
       }
     }
   }
-  if (now - collisionState.lastImpact > 350) {
+  if (now - collisionState.lastImpact > collisionActiveDurationMs) {
     collisionState.active = false;
     collisionState.lastType = null;
   }
