@@ -49,8 +49,10 @@ const utilityMat=new PBRMaterial('utility_pole',scene); utilityMat.albedoColor=n
 for(const z of [-30,30]){const pole=MeshBuilder.CreateCylinder('utility_pole',{height:7,diameter:.14},scene);pole.position.set(8.7,3.5,z);pole.material=utilityMat;const arm=MeshBuilder.CreateBox('utility_arm',{width:2.2,height:.08,depth:.08},scene);arm.position.set(8.7,6.3,z);arm.material=utilityMat;}
 const carMat=new PBRMaterial('vehicle',scene);carMat.albedoColor=new Color3(.035,.16,.28);carMat.metallic=.82;carMat.roughness=.24;
 const car=MeshBuilder.CreateBox('vehicle',{width:2.25,height:.7,depth:4.5},scene);car.position.set(0,.7,-6);car.material=carMat;if(shadowGenerator)shadowGenerator.addShadowCaster(car);
-const trafficMat=new PBRMaterial('traffic_vehicle',scene); trafficMat.metallic=.72; trafficMat.roughness=.3; const ambientTraffic=[];
-for(let i=0;i<(quality==='mobile'?2:5);i++){const traffic=MeshBuilder.CreateBox('ambient_vehicle',{width:1.65,height:.55,depth:3.2},scene);traffic.position.set(i%2===0?-4.2:4.2,.55,14+i*11);traffic.material=trafficMat.clone(`traffic_${i}`);traffic.material.albedoColor=[new Color3(.35,.04,.03),new Color3(.04,.2,.36),new Color3(.45,.3,.04)][i%3];const speed=2.2+i*.45;traffic.metadata={...(traffic.metadata||{}),baseSpeed:speed};ambientTraffic.push({mesh:traffic,speed,direction:i%2===0?1:-1});}
+const trafficColors=[new Color3(.35,.04,.03),new Color3(.04,.2,.36),new Color3(.45,.3,.04)];
+const trafficMaterials=trafficColors.map((color,index)=>{const material=new PBRMaterial(`traffic_vehicle_${index}`,scene);material.metallic=.72;material.roughness=.3;material.albedoColor=color;return material;});
+const ambientTraffic=[];
+for(let i=0;i<(quality==='mobile'?2:5);i++){const traffic=MeshBuilder.CreateBox('ambient_vehicle',{width:1.65,height:.55,depth:3.2},scene);traffic.position.set(i%2===0?-4.2:4.2,.55,14+i*11);traffic.material=trafficMaterials[i%trafficMaterials.length];const speed=2.2+i*.45;traffic.metadata={...(traffic.metadata||{}),baseSpeed:speed};ambientTraffic.push({mesh:traffic,speed,direction:i%2===0?1:-1});}
 const glass=new PBRMaterial('glass',scene);glass.albedoColor=new Color3(.02,.035,.045);glass.metallic=.2;glass.roughness=.08;
 const cabin=MeshBuilder.CreateBox('cabin',{width:1.75,height:.62,depth:2.15},scene);cabin.position.set(0,1.25,-6);cabin.material=glass;
 const chromeMat=new PBRMaterial('vehicle_chrome',scene); chromeMat.albedoColor=new Color3(.22,.28,.32); chromeMat.metallic=.95; chromeMat.roughness=.16;
