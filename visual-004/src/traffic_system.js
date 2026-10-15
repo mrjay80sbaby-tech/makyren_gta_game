@@ -247,11 +247,12 @@ scene.onBeforeRenderObservable.add(() => {
       const distanceSquaredToPlayer = dxToPlayer * dxToPlayer + dzToPlayer * dzToPlayer;
       if (distanceSquaredToPlayer < nearestPedestrianDistanceSquared) nearestPedestrianDistanceSquared = distanceSquaredToPlayer;
     }
-    data.baseSpeed = baseSpeed;
-    data.district = pedestrianDistrict;
-    data.districtLabel = pedestrianProfile.label;
-    data.targetSpeed = baseSpeed * pedestrianProfile.pedestrian;
-    data.speed = data.targetSpeed;
+    if (data.baseSpeed !== baseSpeed) data.baseSpeed = baseSpeed;
+    if (data.district !== pedestrianDistrict) data.district = pedestrianDistrict;
+    if (data.districtLabel !== pedestrianProfile.label) data.districtLabel = pedestrianProfile.label;
+    const targetSpeed = baseSpeed * pedestrianProfile.pedestrian;
+    if (data.targetSpeed !== targetSpeed) data.targetSpeed = targetSpeed;
+    if (data.speed !== targetSpeed) data.speed = targetSpeed;
     pedestrian.position.z += data.speed * data.direction * dt;
     if (pedestrian.position.z > pedestrianWrapBoundaryZ) pedestrian.position.z = -pedestrianWrapBoundaryZ;
     if (pedestrian.position.z < -pedestrianWrapBoundaryZ) pedestrian.position.z = pedestrianWrapBoundaryZ;
