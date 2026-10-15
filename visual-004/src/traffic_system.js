@@ -16,6 +16,8 @@ const quality = window.MakyrenVisualQuality?.preset || 'high';
 const mobile = quality === 'mobile';
 const districtBoundaryZ = 10;
 const pedestrianWrapBoundaryZ = 34;
+const pedestrianBobFrequency = 4;
+const pedestrianBobAmplitude = .025;
 const districtForZ = z => Math.abs(z) < districtBoundaryZ ? 'downtown' : (z < 0 ? 'southside' : 'northside');
 const districtProfile = {
   downtown: { speed: .78, pedestrian: 1.12, label: 'Downtown' },
@@ -244,7 +246,7 @@ scene.onBeforeRenderObservable.add(() => {
     if (pedestrian.position.z > pedestrianWrapBoundaryZ) pedestrian.position.z = -pedestrianWrapBoundaryZ;
     if (pedestrian.position.z < -pedestrianWrapBoundaryZ) pedestrian.position.z = pedestrianWrapBoundaryZ;
     pedestrian.rotation.y = data.direction > 0 ? Math.PI : 0;
-    pedestrian.position.y = Math.sin(elapsed * 4 + data.phase) * .025;
+    pedestrian.position.y = Math.sin(elapsed * pedestrianBobFrequency + data.phase) * pedestrianBobAmplitude;
     animationHooks.update(pedestrian, dt);
   }
   nearestPedestrianDistance = Number.isFinite(nearestPedestrianDistanceSquared) ? Math.sqrt(nearestPedestrianDistanceSquared) : Infinity;
