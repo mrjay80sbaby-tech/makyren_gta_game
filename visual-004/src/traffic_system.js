@@ -125,11 +125,11 @@ for (let i = 0; i < pedestrianCount; i++) {
   root.parent = pedestrianRoot;
   const body = MeshBuilder.CreateCylinder(`pedestrian_body_${i}`, { height: 1.05, diameter: .38, tessellation: 8 }, scene);
   body.position.y = .72;
-  body.material = pedestrianBodyMat.clone(`pedestrian_body_mat_${i}`);
+  body.material = pedestrianBodyMat;
   body.parent = root;
   const head = MeshBuilder.CreateSphere(`pedestrian_head_${i}`, { diameter: .34, segments: 8 }, scene);
   head.position.y = 1.43;
-  head.material = pedestrianSkinMat.clone(`pedestrian_skin_mat_${i}`);
+  head.material = pedestrianSkinMat;
   head.parent = root;
   const side = i % 2 === 0 ? -1 : 1;
   const initialZ = pedestrianStartZ + i * pedestrianSpacingZ;
