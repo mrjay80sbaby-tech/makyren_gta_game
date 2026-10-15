@@ -324,7 +324,7 @@ scene.onBeforeRenderObservable.add(() => {
       }
     }
   }
-  if (now - collisionState.lastImpact > collisionActiveDurationMs) {
+  if (collisionState.active && now - collisionState.lastImpact > collisionActiveDurationMs) {
     collisionState.active = false;
     collisionState.lastType = null;
   }
