@@ -178,13 +178,14 @@ scene.onBeforeRenderObservable.add(() => {
   const dt = Math.min(.1, engine.getDeltaTime() / 1000);
   elapsed += dt;
   signalState.elapsed += dt;
-  const current = signalCycle[signalIndex];
-  signalState.remaining = current ? Math.max(0, current.duration - signalState.elapsed) : 0;
+  let current = signalCycle[signalIndex];
   if (current && signalState.elapsed >= current.duration) {
     signalState.elapsed -= current.duration;
     signalIndex = (signalIndex + 1) % signalCycle.length;
     setSignal(signalCycle[signalIndex].phase);
+    current = signalCycle[signalIndex];
   }
+  signalState.remaining = current ? Math.max(0, current.duration - signalState.elapsed) : 0;
 
   const signalPhase = signalState.phase;
 
