@@ -256,7 +256,8 @@ scene.onBeforeRenderObservable.add(() => {
     pedestrian.position.z += data.speed * data.direction * dt;
     if (pedestrian.position.z > pedestrianWrapBoundaryZ) pedestrian.position.z = -pedestrianWrapBoundaryZ;
     if (pedestrian.position.z < -pedestrianWrapBoundaryZ) pedestrian.position.z = pedestrianWrapBoundaryZ;
-    pedestrian.rotation.y = data.direction > 0 ? Math.PI : 0;
+    const pedestrianRotationY = data.direction > 0 ? Math.PI : 0;
+    if (pedestrian.rotation.y !== pedestrianRotationY) pedestrian.rotation.y = pedestrianRotationY;
     pedestrian.position.y = Math.sin(elapsed * pedestrianBobFrequency + data.phase) * pedestrianBobAmplitude;
     animationHooks.update(pedestrian, dt);
   }
