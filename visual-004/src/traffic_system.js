@@ -27,6 +27,8 @@ const playerRoot = scene.getTransformNodeByName('player_root');
 const collisionState = { active: false, lastImpact: 0, impacts: 0, lastType: null };
 const trafficCollisionHalfWidth = 1.65;
 const trafficCollisionHalfDepth = 2.65;
+const pedestrianCollisionRadiusSquared = 1.1025;
+const onFootVehicleCollisionRadiusSquared = 1.5625;
 
 let signalIndex = 0;
 const signalState = { phase: 'green', elapsed: 0, remaining: 7 };
@@ -260,7 +262,7 @@ scene.onBeforeRenderObservable.add(() => {
       const dx = pedestrianPlayerX - pedestrian.position.x;
       const dz = pedestrianPlayerZ - pedestrian.position.z;
       const distanceSquared = dx * dx + dz * dz;
-      if (distanceSquared < 1.1025) {
+      if (distanceSquared < pedestrianCollisionRadiusSquared) {
         const distance = Math.sqrt(distanceSquared);
         const len = Math.max(.001, distance);
         pedestrianPlayerX += (dx / len) * .07;
@@ -279,7 +281,7 @@ scene.onBeforeRenderObservable.add(() => {
       const dx = collisionPlayerX - vehicle.position.x;
       const dz = collisionPlayerZ - vehicle.position.z;
       const distanceSquared = dx * dx + dz * dz;
-      if (distanceSquared < 1.5625) {
+      if (distanceSquared < onFootVehicleCollisionRadiusSquared) {
         const len = Math.max(.001, Math.sqrt(distanceSquared));
         collisionPlayerX += (dx / len) * .08;
         collisionPlayerZ += (dz / len) * .08;
