@@ -20,6 +20,7 @@ const pedestrianBobFrequency = 4;
 const pedestrianBobAmplitude = .025;
 const pedestrianStartZ = -28;
 const pedestrianSpacingZ = 18;
+const pedestrianLaneOffsetX = 10.25;
 const districtForZ = z => Math.abs(z) < districtBoundaryZ ? 'downtown' : (z < 0 ? 'southside' : 'northside');
 const districtProfile = {
   downtown: { speed: .78, pedestrian: 1.12, label: 'Downtown' },
@@ -129,7 +130,7 @@ for (let i = 0; i < pedestrianCount; i++) {
   head.parent = root;
   const side = i % 2 === 0 ? -1 : 1;
   const initialZ = pedestrianStartZ + i * pedestrianSpacingZ;
-  root.position.set(side * 10.25, 0, initialZ);
+  root.position.set(side * pedestrianLaneOffsetX, 0, initialZ);
   const district = districtForZ(initialZ);
   const profile = districtProfile[district];
   const baseSpeed = .75 + i * .08;
