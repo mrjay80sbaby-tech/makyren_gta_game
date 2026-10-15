@@ -201,15 +201,12 @@ scene.onBeforeRenderObservable.add(() => {
     const district = districtForZ(vehicle.position.z);
     const profile = districtProfile[district];
     const baseSpeed = vehicle.metadata?.baseSpeed ?? trafficFallbackBaseSpeeds.get(vehicle) ?? 2.2;
-    const targetSpeed = baseSpeed * profile.speed;
-    if (vehicle.speed !== targetSpeed) vehicle.speed = targetSpeed;
     const metadata = vehicle.metadata || (vehicle.metadata = {});
     if (metadata.traffic !== true) metadata.traffic = true;
     if (metadata.laneDirection !== laneDirection) metadata.laneDirection = laneDirection;
     if (metadata.signalPhase !== signalPhase) metadata.signalPhase = signalPhase;
     if (metadata.district !== district) metadata.district = district;
     if (metadata.districtLabel !== profile.label) metadata.districtLabel = profile.label;
-    if (metadata.targetSpeed !== targetSpeed) metadata.targetSpeed = targetSpeed;
     if (driving) {
       const dxToPlayer = vehicle.position.x - playerVehicleX;
       const dzToPlayer = vehicle.position.z - playerVehicleZ;
@@ -226,10 +223,12 @@ scene.onBeforeRenderObservable.add(() => {
     const approachingCrosswalk = laneDirection > 0
       ? vehicle.position.z < positiveLaneCrosswalkMaxZ && vehicle.position.z > positiveLaneCrosswalkMinZ
       : vehicle.position.z > negativeLaneCrosswalkMinZ && vehicle.position.z < negativeLaneCrosswalkMaxZ;
-    if (signalPhase === 'red' && approachingCrosswalk) {
+    const stoppedAtRed = signalPhase === 'red' && approachingCrosswalk;
+    const targetSpeed = stoppedAtRed ? 0 : baseSpeed * profile.speed;
+    if (vehicle.speed !== targetSpeed) vehicle.speed = targetSpeed;
+    if (metadata.targetSpeed !== targetSpeed) metadata.targetSpeed = targetSpeed;
+    if (stoppedAtRed) {
       const stopZ = laneDirection > 0 ? positiveLaneStopZ : negativeLaneStopZ;
-      if (vehicle.speed !== 0) vehicle.speed = 0;
-      if (metadata.targetSpeed !== 0) metadata.targetSpeed = 0;
       if (laneDirection > 0) vehicle.position.z = Math.min(vehicle.position.z, stopZ);
       else vehicle.position.z = Math.max(vehicle.position.z, stopZ);
     }
