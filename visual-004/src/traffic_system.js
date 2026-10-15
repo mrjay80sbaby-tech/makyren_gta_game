@@ -14,7 +14,8 @@ const scene = await waitForScene();
 const engine = scene.getEngine();
 const quality = window.MakyrenVisualQuality?.preset || 'high';
 const mobile = quality === 'mobile';
-const districtForZ = z => Math.abs(z) < 10 ? 'downtown' : (z < 0 ? 'southside' : 'northside');
+const districtBoundaryZ = 10;
+const districtForZ = z => Math.abs(z) < districtBoundaryZ ? 'downtown' : (z < 0 ? 'southside' : 'northside');
 const districtProfile = {
   downtown: { speed: .78, pedestrian: 1.12, label: 'Downtown' },
   southside: { speed: 1.02, pedestrian: .92, label: 'Southside' },
