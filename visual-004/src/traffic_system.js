@@ -106,12 +106,9 @@ const signalEmissive = {
 const setSignal = phase => {
   signalState.phase = phase;
   signalState.remaining = signalCycle[signalIndex]?.duration ?? 0;
-  for (const side of [-1, 1]) {
-    const lamps = signalLights[side];
-    lamps.red.material.emissiveColor = phase === 'red' ? signalEmissive.redOn : signalEmissive.redOff;
-    lamps.yellow.material.emissiveColor = phase === 'yellow' ? signalEmissive.yellowOn : signalEmissive.yellowOff;
-    lamps.green.material.emissiveColor = phase === 'green' ? signalEmissive.greenOn : signalEmissive.greenOff;
-  }
+  signalLampMaterials.red.emissiveColor = phase === 'red' ? signalEmissive.redOn : signalEmissive.redOff;
+  signalLampMaterials.yellow.emissiveColor = phase === 'yellow' ? signalEmissive.yellowOn : signalEmissive.yellowOff;
+  signalLampMaterials.green.emissiveColor = phase === 'green' ? signalEmissive.greenOn : signalEmissive.greenOff;
 };
 setSignal('green');
 
