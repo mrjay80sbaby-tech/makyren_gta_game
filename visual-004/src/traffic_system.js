@@ -66,6 +66,11 @@ signalMaterial.albedoColor = new Color3(.025, .03, .035);
 signalMaterial.metallic = .35;
 signalMaterial.roughness = .55;
 
+const signalLampMaterials = {
+  red: signalMaterial.clone('signal_lamp_red'),
+  yellow: signalMaterial.clone('signal_lamp_yellow'),
+  green: signalMaterial.clone('signal_lamp_green'),
+};
 const signalLights = {};
 for (const side of [-1, 1]) {
   const pole = MeshBuilder.CreateCylinder(`signal_pole_${side}`, { height: 5.5, diameter: .11 }, scene);
@@ -84,8 +89,8 @@ for (const side of [-1, 1]) {
   signalLights[side].red.position.set(side * 8.7, 5.42, -1.67);
   signalLights[side].yellow.position.set(side * 8.7, 5.15, -1.67);
   signalLights[side].green.position.set(side * 8.7, 4.88, -1.67);
-  for (const light of Object.values(signalLights[side])) {
-    light.material = signalMaterial.clone(`signal_lamp_${light.name}`);
+  for (const [color, light] of Object.entries(signalLights[side])) {
+    light.material = signalLampMaterials[color];
     light.parent = signalRoot;
   }
 }
