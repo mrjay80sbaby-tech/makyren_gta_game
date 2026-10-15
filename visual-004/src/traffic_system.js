@@ -235,15 +235,16 @@ scene.onBeforeRenderObservable.add(() => {
   if (Number.isFinite(nearestPedestrianDistanceSquared)) nearestPedestrianDistance = Math.sqrt(nearestPedestrianDistanceSquared);
 
   if (driving) {
-    const playerX = playerVehicleX;
-    const playerZ = playerVehicleZ;
+    let collisionVehiclePlayerX = playerVehicleX;
+    const collisionVehiclePlayerZ = playerVehicleZ;
     for (const vehicle of traffic) {
-      const dx = vehicle.position.x - playerX;
-      const dz = vehicle.position.z - playerZ;
+      const dx = vehicle.position.x - collisionVehiclePlayerX;
+      const dz = vehicle.position.z - collisionVehiclePlayerZ;
       if (Math.abs(dx) < trafficCollisionHalfWidth && Math.abs(dz) < trafficCollisionHalfDepth) {
         const push = dx >= 0 ? .12 : -.12;
         vehicle.position.x += push;
-        playerVehicle.position.x -= push * .45;
+        collisionVehiclePlayerX -= push * .45;
+        playerVehicle.position.x = collisionVehiclePlayerX;
         collisionState.active = true;
         collisionState.lastImpact = now;
         collisionState.lastType = 'vehicle';
