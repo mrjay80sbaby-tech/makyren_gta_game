@@ -1,3 +1,6 @@
 visual-004/node_modules/
 visual-004/dist/
 .DS_Store
+
+visual-004/test-results/
+visual-004/playwright-report/

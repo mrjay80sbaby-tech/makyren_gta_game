@@ -83,7 +83,7 @@ addEventListener('keydown',e=>{if(e.code==='KeyE')interactWorld();if(e.code==='K
 document.getElementById('bag').onclick=()=>document.getElementById('inventory').classList.toggle('hidden');
 document.getElementById('closeBag').onclick=()=>document.getElementById('inventory').classList.add('hidden');
 document.getElementById('closeShop').onclick=()=>document.getElementById('shop').classList.add('hidden');
-document.getElementById('buyMedkit').onclick=()=>{if(gameState.cash>=100){gameState.cash-=100;gameState.inventory.push('Medkit');refreshGameUI()}else document.getElementById('shopTitle').textContent='NOT ENOUGH CASH'});
+document.getElementById('buyMedkit').onclick=()=>{if(gameState.cash>=100){gameState.cash-=100;gameState.inventory.push('Medkit');refreshGameUI()}else document.getElementById('shopTitle').textContent='NOT ENOUGH CASH'};
 
 
 // MAKYREN-017 — Vehicle Polish Layer
