@@ -1,0 +1,42 @@
+name: Visual-004 Playwright
+
+on:
+  push:
+    paths:
+      - 'visual-004/**'
+      - '.github/workflows/visual-004-playwright.yml'
+  pull_request:
+    paths:
+      - 'visual-004/**'
+      - '.github/workflows/visual-004-playwright.yml'
+  workflow_dispatch:
+
+jobs:
+  playwright:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: visual-004
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: visual-004/package.json
+      - name: Install dependencies
+        run: npm install
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Build Visual-004
+        run: npm run build
+      - name: Run Playwright smoke test
+        run: npx playwright test
+      - name: Upload trace on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: visual-004/test-results
