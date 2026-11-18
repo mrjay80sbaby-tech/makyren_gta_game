@@ -14,7 +14,18 @@ const required = [
   'new ColorCurves',
   'MakyrenCharacterAnimator',
   'const heroKey=',
-  'const cityRim='
+  'const cityRim=',
+  'touch-actions',
+  "'KeyE'",
+  "'KeyR'",
+  'webgl-unavailable',
+  'loadTrafficVehicles',
+  'streetLampMobile',
+  'loadRealisticTrees',
+  'loadStorefronts',
+  'concrete/color.jpg',
+  'loadCharacter',
+  'casual_male.glb'
 ];
 for (const token of required) {
   if (!source.includes(token)) throw new Error(`missing source assertion: ${token}`);

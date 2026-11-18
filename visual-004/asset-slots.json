@@ -1,20 +1,172 @@
 {
   "license_policy": "Use CC0 or otherwise commercially permitted assets only; verify each asset license before shipping.",
   "slots": {
-    "character": {"path": "assets/makyren.glb", "fallback": "procedural_capsule", "lods": ["high", "medium", "mobile"]},
-    "vehicle": {"path": "assets/hero_vehicle.glb", "fallback": "procedural_vehicle", "source": "https://kenney.nl/assets/car-kit", "license": "CC0", "delivery_note": "Kenney Car Kit sports sedan GLB with shared 512px colormap texture.", "lods": ["high", "medium", "mobile"]},
-    "buildings": {"path": "assets/city-kit.glb", "fallback": "procedural_buildings", "lods": ["high", "medium", "mobile"]},
-    "props": {"path": "assets/street-props.glb", "fallback": "procedural_props", "lods": ["high", "medium", "mobile"]},
-    "streetLamp": {"path": "assets/street_lamp_01.glb", "fallback": "procedural_lamp", "source": "https://polyhaven.com/a/street_lamp_01", "license": "CC0", "delivery_note": "Use an optimized lower-resolution GLB; the listed 4K source is 31.41 MB."},
-    "tree": {"path": "assets/tree_small_02.glb", "fallback": "procedural_tree", "source": "https://polyhaven.com/a/tree_small_02", "license": "CC0", "delivery_note": "Use a decimated, texture-resized GLB; the listed 4K source is 263.02 MB."}
+    "character": {
+      "path": "assets/character/casual_male.glb",
+      "fallback": "procedural_capsule",
+      "source": "https://poly.pizza/m/kZ3DmIoGip",
+      "license": "CC0",
+      "delivery_note": "Quaternius Casual Character (Ultimate Modular Men Pack). 1.43 MB, ~1.86 m, 24 animation clips incl. Walk/Run/Idle, vertex colours, no external textures. Single instance; no decimated mobile LOD in v1 (accepted exception).",
+      "lods": [
+        "high",
+        "medium",
+        "mobile"
+      ]
+    },
+    "vehicle": {
+      "path": "assets/hero_vehicle.glb",
+      "fallback": "procedural_vehicle",
+      "source": "https://kenney.nl/assets/car-kit",
+      "license": "CC0",
+      "delivery_note": "Kenney Car Kit sports sedan GLB with shared 512px colormap texture.",
+      "lods": [
+        "high",
+        "medium",
+        "mobile"
+      ]
+    },
+    "buildings": {
+      "path": "assets/city-kit.glb",
+      "fallback": "procedural_buildings",
+      "lods": [
+        "high",
+        "medium",
+        "mobile"
+      ]
+    },
+    "props": {
+      "path": "assets/street-props.glb",
+      "fallback": "procedural_props",
+      "lods": [
+        "high",
+        "medium",
+        "mobile"
+      ]
+    },
+    "streetLamp": {
+      "path": "assets/street_lamp_01.glb",
+      "fallback": "procedural_lamp",
+      "source": "https://polyhaven.com/a/street_lamp_01",
+      "license": "CC0",
+      "delivery_note": "Use an optimized lower-resolution GLB; the listed 4K source is 31.41 MB."
+    },
+    "tree": {
+      "path": "assets/tree.glb",
+      "fallback": "procedural_tree",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "license": "CC0",
+      "delivery_note": "Kenney Nature Kit low-poly tree, 62 tris, 5,968 B. Poly Haven Tree Small 02 was NOT shipped (263 MB / ~5M tris source); Kenney tree is the plan's low-poly fallback. Non-mobile only.",
+      "lods": [
+        "high",
+        "medium"
+      ]
+    },
+    "streetLampMobile": {
+      "path": "assets/street_lamp_01_mobile.glb",
+      "fallback": "procedural_lamp",
+      "source": "https://polyhaven.com/a/street_lamp_01",
+      "license": "CC0",
+      "delivery_note": "Poly Haven Street Lamp 01 decimated offline with glTF-Transform (simplify 0.25, textures resized to <=1024): 674 KB, 7,820 tris. Mobile tier only.",
+      "lods": [
+        "mobile"
+      ]
+    },
+    "traffic": {
+      "path": "assets/traffic/",
+      "files": [
+        "sedan.glb",
+        "hatchback-sports.glb",
+        "taxi.glb",
+        "police.glb"
+      ],
+      "fallback": "procedural_traffic_box",
+      "source": "https://kenney.nl/assets/car-kit",
+      "license": "CC0",
+      "delivery_note": "Kenney Car Kit 3.1. Each GLB ~175-198 KB, ~2,000-2,300 tris, references Textures/colormap.png (identical copy in assets/traffic/Textures/). Mobile tier: 2 cars.",
+      "lods": [
+        "high",
+        "medium",
+        "mobile"
+      ]
+    },
+    "storefronts": {
+      "path": "assets/storefronts/",
+      "files": [
+        "building-e.glb",
+        "building-j.glb",
+        "building-k.glb",
+        "low-detail-building-wide-a.glb"
+      ],
+      "fallback": "procedural_buildings",
+      "source": "https://kenney.nl/assets/city-kit-commercial",
+      "license": "CC0",
+      "delivery_note": "Kenney City Kit Commercial 2.1. Low-rise blocks used as shopfront annexes on street-facing building sides (6 spots). Non-mobile only.",
+      "lods": [
+        "high",
+        "medium"
+      ]
+    }
   },
   "materials": {
-    "asphalt": {"path": "assets/materials/asphalt", "source": "https://ambientcg.com/view?id=Asphalt025C", "license": "CC0", "maps": ["color", "normal", "roughness", "ao"], "tiers": ["high", "medium"]},
-    "facade": {"path": "assets/materials/facade", "source": "https://ambientcg.com/view?id=Facade001", "license": "CC0", "maps": ["color", "normal", "roughness"], "tiers": ["high", "medium"]}
+    "asphalt": {
+      "path": "assets/materials/asphalt",
+      "source": "https://ambientcg.com/view?id=Asphalt025C",
+      "license": "CC0",
+      "maps": [
+        "color",
+        "normal",
+        "roughness",
+        "ao"
+      ],
+      "tiers": [
+        "high",
+        "medium"
+      ]
+    },
+    "facade": {
+      "path": "assets/materials/facade",
+      "source": "https://ambientcg.com/view?id=Facade001",
+      "license": "CC0",
+      "maps": [
+        "color",
+        "normal",
+        "roughness"
+      ],
+      "tiers": [
+        "high",
+        "medium"
+      ]
+    },
+    "concrete": {
+      "path": "assets/materials/concrete",
+      "source": "https://ambientcg.com/view?id=Concrete012",
+      "license": "CC0",
+      "maps": [
+        "color",
+        "normal",
+        "roughness"
+      ],
+      "tiers": [
+        "high",
+        "medium"
+      ]
+    }
   },
   "quality": {
-    "high": {"hardware_scale": 0.85, "glow": 0.7, "windows": true},
-    "medium": {"hardware_scale": 1.2, "glow": 0.45, "windows": true},
-    "mobile": {"hardware_scale": 1.55, "glow": 0.25, "windows": false}
+    "high": {
+      "hardware_scale": 0.85,
+      "glow": 0.7,
+      "windows": true
+    },
+    "medium": {
+      "hardware_scale": 1.2,
+      "glow": 0.45,
+      "windows": true
+    },
+    "mobile": {
+      "hardware_scale": 1.55,
+      "glow": 0.25,
+      "windows": false
+    }
   }
 }
