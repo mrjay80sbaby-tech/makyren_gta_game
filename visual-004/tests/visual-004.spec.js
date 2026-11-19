@@ -130,8 +130,14 @@ test('steering turns the car instead of strafing it', async ({ page }) => {
     heading: window.MakyrenStreet.carHeading(),
     x: window.MakyrenScene.getMeshByName('vehicle').position.x,
   }));
-  // Facing north, steering right turns the heading down from PI and moves the car east (+x).
-  expect(after.heading).toBeLessThan(before.heading - 0.2);
+  // Facing north, steering right turns the heading down from PI and moves the car east (+x),
+  // but it must be a controlled turn, not a wild spin (MAKYREN-204: max rate 1.15 rad/s).
+  // Bounds are loose on purpose: headless FPS varies (2-7), and dt clamps at 0.1s, so game
+  // time runs slower than real time at low FPS — the same 2.5s hold turns ~0.4 rad at 2 FPS
+  // and ~2.2 rad at 7 FPS. Direction + east movement is the proof; the rate was measured
+  // directly in the touch probe (2.5s touch hold: -2.23 rad, x +7.4).
+  expect(after.heading).toBeLessThan(before.heading - 0.25);
+  expect(after.heading).toBeGreaterThan(before.heading - 4.0);
   expect(after.x).toBeGreaterThan(before.x + 0.5);
 });
 
