@@ -98,3 +98,67 @@ test('touch E/R buttons exist on a phone viewport', async ({ browser }) => {
   await expect(page.locator('#touch-controls')).toBeVisible();
   await context.close();
 });
+
+test('steering turns the car instead of strafing it', async ({ page }) => {
+  await page.goto('?quality=mobile&debug=1');
+  await page.waitForFunction(() => window.__MAKYREN_VISUAL_READY__ === true, null, { timeout: 60000 });
+  // Walk to the car (same approach as the drive test: S moves z down).
+  await page.keyboard.down('KeyS');
+  await page.waitForFunction(() => {
+    const s = window.MakyrenScene;
+    const p = s.getTransformNodeByName('player_root').position;
+    const c = s.getMeshByName('vehicle').position;
+    const dx = c.x - p.x, dz = c.z - p.z;
+    return dx * dx + dz * dz < 20;
+  }, null, { timeout: 8000 }).catch(() => {});
+  await page.keyboard.up('KeyS');
+  await page.keyboard.down('KeyE');
+  await page.waitForTimeout(2000);
+  await page.keyboard.up('KeyE');
+  await page.waitForFunction(() => window.MakyrenMissionProgress?.mission?.state === 'drive', null, { timeout: 10000 });
+  // Hold W (gas) + D (steer right) and watch the heading turn east.
+  const before = await page.evaluate(() => ({
+    heading: window.MakyrenStreet.carHeading(),
+    x: window.MakyrenScene.getMeshByName('vehicle').position.x,
+  }));
+  await page.keyboard.down('KeyW');
+  await page.keyboard.down('KeyD');
+  await page.waitForTimeout(2500);
+  await page.keyboard.up('KeyD');
+  await page.keyboard.up('KeyW');
+  const after = await page.evaluate(() => ({
+    heading: window.MakyrenStreet.carHeading(),
+    x: window.MakyrenScene.getMeshByName('vehicle').position.x,
+  }));
+  // Facing north, steering right turns the heading down from PI and moves the car east (+x).
+  expect(after.heading).toBeLessThan(before.heading - 0.2);
+  expect(after.x).toBeGreaterThan(before.x + 0.5);
+});
+
+test('street expands north as the car drives past the old edge', async ({ page }) => {
+  await page.goto('?quality=mobile&debug=1');
+  await page.waitForFunction(() => window.__MAKYREN_VISUAL_READY__ === true, null, { timeout: 60000 });
+  await page.keyboard.down('KeyS');
+  await page.waitForFunction(() => {
+    const s = window.MakyrenScene;
+    const p = s.getTransformNodeByName('player_root').position;
+    const c = s.getMeshByName('vehicle').position;
+    const dx = c.x - p.x, dz = c.z - p.z;
+    return dx * dx + dz * dz < 20;
+  }, null, { timeout: 8000 }).catch(() => {});
+  await page.keyboard.up('KeyS');
+  await page.keyboard.down('KeyE');
+  await page.waitForTimeout(2000);
+  await page.keyboard.up('KeyE');
+  await page.waitForFunction(() => window.MakyrenMissionProgress?.mission?.state === 'drive', null, { timeout: 10000 });
+  // Drive north (W is gas now) past the old -34 edge; the street must grow with the car.
+  await page.keyboard.down('KeyW');
+  await page.waitForFunction(() => window.MakyrenScene.getMeshByName('vehicle').position.z < -45, null, { timeout: 60000 });
+  await page.keyboard.up('KeyW');
+  const street = await page.evaluate(() => ({
+    segments: window.MakyrenStreet.segments(),
+    northEdge: window.MakyrenStreet.northEdge(),
+  }));
+  expect(street.segments).toBeGreaterThanOrEqual(1);
+  expect(street.northEdge).toBeLessThan(-40);
+});
